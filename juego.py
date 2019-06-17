@@ -8,7 +8,7 @@ listaT = []
 
 
 def Lista_letras(palabras,lnue):
-	#''' lista todas las palabras que haya en el diccionario '''
+    """ lista todas las palabras que haya en el diccionario """
     for cadaLista in range(len(palabras['palVer'])):
         for i in palabras['palVer']:
             for pal in i:
@@ -41,10 +41,10 @@ def crearMatriz(nxn):
 
 
 def completarMatriz(matriz, nxn):
-    '''
+    """
         este modulo retorna la matriz de nxn
         con letras aleatorias
-    '''
+    """
     for fila in range(nxn):
         for columna in range(nxn):
             if matriz[fila][columna] is "":
@@ -93,7 +93,6 @@ def colocar_palabra(matriz, palabra, esfila, pos, inicio):
     return matriz
 
 def procesar_palabras(matriz, nxn, palabras, esfila):
-    posiciones = []
     for i in range(len(palabras)):
         pos_inicial = random.randint(0, nxn-1) 
         posicion = pos_inicial
@@ -105,28 +104,18 @@ def procesar_palabras(matriz, nxn, palabras, esfila):
                 if int(valores_en_posicion[ e * 2]) > len(palabras[i]):
                     margen = int(valores_en_posicion[e * 2]) - len(palabras[i])
                     matriz = colocar_palabra(matriz, palabras[i], esfila, posicion, margen)
-                    fila_inicio = posicion
-                    columna_inicio = margen
-                    fila_final = posicion
                     columna_final = margen + len(palabras[i])-1
-                    if esfila is False:
-                        posiciones.append((columna_inicio, fila_inicio))
-                        posiciones.append((columna_final, fila_final))
-                    else:
-                        posiciones.append((fila_inicio, columna_inicio))
-                        posiciones.append((fila_final, columna_final))
                     colocada = True
             if not colocada:
                 if posicion < nxn-1:
                     posicion += 1
                 else:
                     posicion = 0
-    print(posiciones)
-    return matriz, posiciones
+    return matriz
 
 
 def evaluar_palabra(palabra_evaluar,lnue,M):
-	#''' Compara la palabra ingresada como parametro con cada elemento de de la lista '''
+    """ Compara la palabra ingresada como parametro con cada elemento de de la lista """
     ok=True
     encontre = False
     i = 0
@@ -148,7 +137,7 @@ def evaluar_palabra(palabra_evaluar,lnue,M):
 
 
 def definir_color(un_string,dic):
-	#'''' recibe una palabra a buscar en el diccionario, la busca y nos retorno un valor(color) del diccionaro '''
+    """ recibe una palabra a buscar en el diccionario, la busca y nos retorno un valor(color) del diccionaro """
     color = 'aaaa'
     if un_string in dic['palVer'][0]:
         color = dic['verbo']
@@ -193,7 +182,7 @@ def tablero(long_maxPal,dic_palabras,M,ok,ayuda):
     Lista_letras(dic_palabras,lnue)     #recibe el diccionario, devuelve una lista(lnue) de todas las palabras seleccionadas
     nxn = long_maxPal + 1
     matriz = crearMatriz(nxn)
-    matriz, posiciones = procesar_palabras(matriz, nxn, lnue, ok)
+    matriz = procesar_palabras(matriz, nxn, lnue, ok)
     dato = completarMatriz(matriz, nxn)
     graficar_matrix(dato, nxn, g, M)
     lista_click = []                    #esta lista contendra las letras que seran evaluadas con las palabras de la lista(lnue)

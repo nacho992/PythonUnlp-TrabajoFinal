@@ -8,6 +8,7 @@ listaT = []
 
 
 def Lista_letras(palabras,lnue):
+	''' lista todas las palabras que haya en el diccionario '''
     for cadaLista in range(len(palabras['palVer'])):
         for i in palabras['palVer']:
             for pal in i:
@@ -125,6 +126,7 @@ def procesar_palabras(matriz, nxn, palabras, esfila):
 
 
 def evaluar_palabra(palabra_evaluar,lnue,M):
+	''' Compara la palabra ingresada como parametro con cada elemento de de la lista '''
     ok=True
     encontre = False
     i = 0
@@ -146,6 +148,7 @@ def evaluar_palabra(palabra_evaluar,lnue,M):
 
 
 def definir_color(un_string,dic):
+	'''' recibe una palabra a buscar en el diccionario, la busca y nos retorno un valor(color) del diccionaro '''
     color = 'aaaa'
     if un_string in dic['palVer'][0]:
         color = dic['verbo']

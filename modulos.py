@@ -136,7 +136,10 @@ def ingresar_definicion ():
             break
             msj = ''
     window.Close()
-    return msj
+    try:
+        return msj
+    except UnboundLocalError:
+        None
 
 
 

@@ -7,6 +7,16 @@ dicColor = {}
 listaT = []
 
 
+
+
+def obtener_datosArch(arch):
+
+    a = open(arch,'r')
+    datos = a.read()
+    a.close()
+    return datos
+
+
 def Lista_letras(palabras,lnue):
     """ lista todas las palabras que haya en el diccionario """
     for cadaLista in range(len(palabras['palVer'])):
@@ -163,7 +173,7 @@ def graficar_matrix(mt, nxn, d, M):
 
 #ok = False SENTIDO DE LA DE LAS PALABRAS EN LA MATRIZ
 #M = SI ES MAYUSCULA O LO OPUESTO
-def tablero(long_maxPal,dic_palabras,M,ok,ayuda):
+def tablero(long_maxPal,dic_palabras,M,ok,TipoAyuda):
     sg.ChangeLookAndFeel('Dark')
     layout = [
             [sg.Text('tes de tablero'), sg.Text('', key='_salida_')],
@@ -171,8 +181,8 @@ def tablero(long_maxPal,dic_palabras,M,ok,ayuda):
             [sg.Frame(
                             layout = [
                                         [sg.Text('Cantidad de palabras restantes :'),sg.Text('',key= 'cantPal')],
-                                        [sg.Multiline('',key='ayuda')],
-                                     ], title = 'Cantidad de palabras', title_color = 'lightgreen' 
+                                        [sg.Multiline('',key='ayuda'),sg.Multiline('',key='def')],
+                                     ], title = 'Cantidad de palabras y/o Definiciones y palabras', title_color = 'lightgreen'
                         )],
             [sg.Button('ver'), sg.Button('cancelar'),sg.Button('Verificar Palabra / Limpiar selección')],
          ]
@@ -188,12 +198,22 @@ def tablero(long_maxPal,dic_palabras,M,ok,ayuda):
     lista_click = []                    #esta lista contendra las letras que seran evaluadas con las palabras de la lista(lnue)
     todos_los_clik = []                 #todas las cooredenadas donde se hizo click en el tablero
     cantidad_pal = len(lnue)
+    palabrasBuscadas = '\n'.join(['{}'.format(p) for p in lnue])
     window.FindElement('cantPal').Update(cantidad_pal)
-    if ayuda:
-        palabrasBuscadas = '\n'.join(['{}'.format(p) for p in lnue])
+    defPal = obtener_datosArch('ArchivoLocal.txt')  #SE OBTIENEN LAS DEFINICIONES GUARDADAS EN UN ARCHIVO LOCAL
+
+
+    #--------SE EVALUAN LAS CONDICIONES DE AYUDA-------
+    if TipoAyuda[0] and TipoAyuda[1]:
+        window.FindElement('def').Update(defPal)
+        window.FindElement('ayuda').Update(palabrasBuscadas)       
+    elif  TipoAyuda[0]:
         window.FindElement('ayuda').Update(palabrasBuscadas)
+    elif TipoAyuda[1]:
+        window.FindElement('ayuda').Update(defPal)
     else:
         window.FindElement('cantPal').Update(str(len(lnue)))
+    ##--------FIN EVALUACION-------
     while True:
         button, values = window.Read()
         if button is None or button is 'cancelar':

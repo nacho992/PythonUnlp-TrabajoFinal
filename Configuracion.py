@@ -5,7 +5,10 @@ from modulos import mostrar_palabra
 from modulos import eliminarPalabra
 from juego import tablero
 import sys
+
 sg.ChangeLookAndFeel('Dark')
+
+
 fuente = 'Helvetica' #Arial Courier Comic Fixedsys Times Verdana Helvetica
 layout = [
           [sg.Text('Configuracion del juego', size=(30, 1), justification='center', font=(fuente, 25), text_color='lightgreen')],
@@ -27,8 +30,8 @@ layout = [
                         )],
                         [sg.Frame(
                             layout = [
-                                        [sg.Text('configurar si desea ver las palabras a encontrar',font=(fuente,12))],
-                                        [sg.Radio('Habilitar', "A", key='ayuda')],
+                                        [sg.Text('Opciones de Ayuda',font=(fuente,12))],
+                                        [sg.Radio('Mostrar palabras', "A", key='ayuda'),sg.Radio('Mostrar definiciones', "D", key='def')],
                                      ], title = 'Habiltar/Deshabilitar Ayuda',font=(fuente,12), title_color = 'lightgreen' 
                         )],
                         [sg.Frame(
@@ -64,7 +67,8 @@ while ok:
         cantS = int(values['X2'])  # X DE CADA TIPO DE PALABRA QUE EL DOCENTE QUIERE MOSTRAR
         cantA = int(values['X3'])  
         dic = getListaResultante(cantV, cantA, cantS, values['roVe'], values['veVe'], values['amVe'], values['roSu'], values['veSu'], values['amSu'], values['roAd'], values['veAd'], values['amAd'])
-        tablero(dic['maxPal'], dic, values['M'], values['h'],values['ayuda'])
+        TipoAyudas = (values['ayuda'],values['def'])
+        tablero(dic['maxPal'], dic, values['M'], values['h'],TipoAyudas)
     if button is 'Cancelar':
         sys.exit()
 window.Close()

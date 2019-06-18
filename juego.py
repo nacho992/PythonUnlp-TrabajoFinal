@@ -2,10 +2,10 @@ import PySimpleGUI as sg
 import random
 import string
 caja = 15
-dic = {}
-dicColor = {}
+dic = {}   #letra en la coordenada
+dicColor = {} #coordenada
 listaT = []
-
+colorTablero = 'dimgrey'
 
 
 
@@ -162,7 +162,7 @@ def graficar_matrix(mt, nxn, d, M):
     for fila in range(nxn):
         for columna in range(nxn):
             localizacion = (fila * caja + 11, columna * caja + 12)
-            dato = d.DrawRectangle((fila * caja + 5, columna * caja + 3), (fila* caja + caja + 5, columna * caja + caja + 3), line_color='white',fill_color='black')
+            dato = d.DrawRectangle((fila * caja + 5, columna * caja + 3), (fila* caja + caja + 5, columna * caja + caja + 3), line_color='white',fill_color=colorTablero)
             dicColor[(fila, columna)] = dato
             if M:
                 dic[(fila, columna)] = mt[fila][columna].upper()
@@ -171,8 +171,8 @@ def graficar_matrix(mt, nxn, d, M):
                 dic[(fila, columna)] = mt[fila][columna].lower()
                 d.DrawText(mt[fila][columna].lower(), localizacion , font='Courier 22', color='white')
 
-#ok = False SENTIDO DE LA DE LAS PALABRAS EN LA MATRIZ
-#M = SI ES MAYUSCULA O LO OPUESTO
+#ok = bool, SENTIDO DE LA DE LAS PALABRAS EN LA MATRIZ, VERTICAL HORIZONTAL
+#M = bool, SI ES MAYUSCULA O MINUSCULA
 def tablero(long_maxPal,dic_palabras,M,ok,TipoAyuda):
     sg.ChangeLookAndFeel('Dark')
     layout = [
@@ -188,9 +188,11 @@ def tablero(long_maxPal,dic_palabras,M,ok,TipoAyuda):
          ]
     window =  sg.Window('panel').Layout(layout).Finalize()
     g = window.FindElement('_dibujar_')
+
+
     lnue = []
     Lista_letras(dic_palabras,lnue)     #recibe el diccionario, devuelve una lista(lnue) de todas las palabras seleccionadas
-    nxn = long_maxPal + 1
+    nxn = long_maxPal + 1               #longuitud de la palabra mas larga
     matriz = crearMatriz(nxn)
     matriz = procesar_palabras(matriz, nxn, lnue, ok)
     dato = completarMatriz(matriz, nxn)
@@ -203,6 +205,8 @@ def tablero(long_maxPal,dic_palabras,M,ok,TipoAyuda):
     defPal = obtener_datosArch('ArchivoLocal.txt')  #SE OBTIENEN LAS DEFINICIONES GUARDADAS EN UN ARCHIVO LOCAL
 
 
+
+
     #--------SE EVALUAN LAS CONDICIONES DE AYUDA-------
     if TipoAyuda[0] and TipoAyuda[1]:
         window.FindElement('def').Update(defPal)
@@ -213,7 +217,7 @@ def tablero(long_maxPal,dic_palabras,M,ok,TipoAyuda):
         window.FindElement('ayuda').Update(defPal)
     else:
         window.FindElement('cantPal').Update(str(len(lnue)))
-    ##--------FIN EVALUACION-------
+    ##-----------------FIN EVALUACION------------------
     while True:
         button, values = window.Read()
         if button is None or button is 'cancelar':
@@ -226,9 +230,14 @@ def tablero(long_maxPal,dic_palabras,M,ok,TipoAyuda):
                 coorY = puntero[0]//caja 
                 coorX = puntero[1]//caja
                 click = (coorY, coorX)
-                lista_click.append(dic[click])
-                todos_los_clik.append(click)
-                g.TKCanvas.itemconfig(dicColor[click], fill= "blue")
+                if click in todos_los_clik:
+                    g.Update(g.TKCanvas.itemconfig(dicColor[click], fill=colorTablero))
+                    todos_los_clik.remove(click)
+                    lista_click.remove(dic[click])
+                else:
+                    g.TKCanvas.itemconfig(dicColor[click], fill="blue")
+                    todos_los_clik.append(click)  #coordenadas
+                    lista_click.append(dic[click]) #letras
             except KeyError:
                 None 
         if button is 'Verificar Palabra / Limpiar selección':
@@ -242,7 +251,7 @@ def tablero(long_maxPal,dic_palabras,M,ok,TipoAyuda):
                 for i in todos_los_clik:
                     g.TKCanvas.itemconfig(dicColor[i]+1, fill= color)
             for i in todos_los_clik:
-                g.Update(g.TKCanvas.itemconfig(dicColor[i], fill='black'))
+                g.Update(g.TKCanvas.itemconfig(dicColor[i], fill=colorTablero))
             todos_los_clik.clear()
             lista_click.clear()
             if cantidad_pal == 0:

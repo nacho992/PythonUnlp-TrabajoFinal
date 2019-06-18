@@ -9,14 +9,13 @@ import sys
 sg.ChangeLookAndFeel('Dark')
 
 
-fuente = 'Helvetica' #Arial Courier Comic Fixedsys Times Verdana Helvetica
+fuente = 'Helvetica'
 layout = [
           [sg.Text('Configuracion del juego', size=(30, 1), justification='center', font=(fuente, 25), text_color='lightgreen')],
-          [sg.InputCombo(values=('Arial', 'Courier','Comic','Fixedsys','Times','Verdana','Helvetica'),size=(10, 1),key='fuente'),sg.Button('Cambiar Fuente',font=(fuente,10))],
           [sg.Frame(
               layout=[
                         [sg.Text('Ingrese palabra',font=(fuente,12), size=(15, 1)), sg.InputText(key='pal'), sg.Button('Agregar', button_color=('white', 'orange')), sg.Button('Eliminar', button_color=('white', 'red'))],
-                        [sg.Output(key='dato', size=(70,1), font='Courier 10')],
+                        [sg.Multiline(key='dato', size=(70,1), font='Courier 10')],
                      ], title='AgregarPalabras', title_color='lightgreen'
           )],
           [sg.Frame(

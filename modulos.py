@@ -145,9 +145,14 @@ def ingresar_definicion ():
 
 
 def clasificar_pal(Un_string):
+    '''
+
     #Se clasifica la palabra segun sea adjetivo, verbo o sustantivo y se agrega a sus correspondiente lista, en caso de que no se pueda se generan reportes
     #si coinside solo con Wiktionary, se pide que ingrese la definicion de la palabra
-    msj = ''
+
+    '''
+
+
     pal = Wiktionary(license=None, throttle=5.0, language='ES').search(Un_string)
     try:
         for section in pal.categories:

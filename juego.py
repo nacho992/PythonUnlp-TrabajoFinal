@@ -175,6 +175,27 @@ def graficar_matrix(mt, nxn, d, M):
 
 #ok = bool, SENTIDO DE LA DE LAS PALABRAS EN LA MATRIZ, VERTICAL HORIZONTAL
 #M = bool, SI ES MAYUSCULA O MINUSCULA
+
+
+def ventana_terminar(cantidad_pal,lnue):
+    ventana = [[sg.Text(f'Cantidad por encontrar :{cantidad_pal}, palabras :{lnue}')],
+               [sg.Radio('Volver al menu',"R",key='v'), sg.Radio('Salir del juego',"R",key='S'),sg.Button('OK')]
+
+               ]
+    window = sg.Window('Continuar?').Layout(ventana)
+    c = 'no'
+    while True:
+        button,values = window.Read()
+        if button is None:
+            break
+        if button is 'OK':
+            if values['v'] is True:
+                c = 'jugar'
+                break
+            else:
+                break
+    return c
+
 def tablero(long_maxPal,dic_palabras,M,ok,TipoAyuda):
     sg.ChangeLookAndFeel('Dark')
     layout = [
@@ -186,11 +207,11 @@ def tablero(long_maxPal,dic_palabras,M,ok,TipoAyuda):
                                         [sg.Multiline('',key='ayuda'),sg.Multiline('',key='def')],
                                      ], title = 'Cantidad de palabras y/o Definiciones y palabras', title_color = 'lightgreen'
                         )],
-            [sg.Button('ver'), sg.Button('cancelar'),sg.Button('Verificar Palabra / Limpiar selección')],
+            [sg.ReadButton('Volver al menu',key='Volver al menu'), sg.Button('cancelar'),sg.Button('Verificar Palabra / Limpiar selección'),sg.Button('terminar')],
          ]
     window =  sg.Window('panel').Layout(layout).Finalize()
     g = window.FindElement('_dibujar_')
-
+    window.FindElement('Volver al menu').Update(disabled=True)
 
     lnue = []
     Lista_letras(dic_palabras,lnue)     #recibe el diccionario, devuelve una lista(lnue) de todas las palabras seleccionadas
@@ -232,6 +253,7 @@ def tablero(long_maxPal,dic_palabras,M,ok,TipoAyuda):
                 coorY = puntero[0]//caja 
                 coorX = puntero[1]//caja
                 click = (coorY, coorX)
+                #------------marcar y desmarcar letras------------#
                 if click in todos_los_clik:
                     g.Update(g.TKCanvas.itemconfig(dicColor[click], fill=colorTablero))
                     todos_los_clik.remove(click)
@@ -243,7 +265,9 @@ def tablero(long_maxPal,dic_palabras,M,ok,TipoAyuda):
             except KeyError:
                 None 
         if button is 'Verificar Palabra / Limpiar selección':
+
             encontre = evaluar_palabra(lista_click,lnue,M)
+            #-------si la seleccion coincide con alguna palabra--------#
             if encontre:
                 cantidad_pal -= 1
                 window.FindElement('cantPal').Update(cantidad_pal)
@@ -252,9 +276,28 @@ def tablero(long_maxPal,dic_palabras,M,ok,TipoAyuda):
                 color = definir_color(x.lower(),dic_palabras)
                 for i in todos_los_clik:
                     g.TKCanvas.itemconfig(dicColor[i]+1, fill= color)
+                lnue.remove(x)                #se van eliminando las palabras encontradas
+                window.FindElement('ayuda').Update(lnue)
+            #-------Se limpia todo lo que haya sido seleccionado--------#
             for i in todos_los_clik:
                 g.Update(g.TKCanvas.itemconfig(dicColor[i], fill=colorTablero))
             todos_los_clik.clear()
             lista_click.clear()
+            #-----------------------------------------------------------#
             if cantidad_pal == 0:
+                window.FindElement('Volver a jugar').Update(disabled=False)
                 sg.Popup('¡¡Has encontrado todas las palabras!!')
+        c = ''
+        if button is 'terminar':
+            var = ventana_terminar(cantidad_pal, lnue)
+            print(var)
+            if var is 'jugar':
+                return var
+            elif var is 'no':
+                return c
+        if button is 'Volver al menu':
+            c = 'jugar'
+            window.Close()
+            return c
+        if button is 'Cancelar':
+            return c

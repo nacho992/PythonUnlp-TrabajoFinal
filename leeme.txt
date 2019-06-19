@@ -1,0 +1,20 @@
+---Integrantes---
+
+Matias Omar Flores,
+Ignacio Alvarez
+
+se
+debera utilizar la version de python 3.6.2 ya que el programa utiliza el modulo pattern el cual con otras versiones puede tener problemas.
+
+
+para comenzar sopa de letras ejecutar archivo Configuracion.py
+
+(main)
+
+ArchvioLocal.txt contendra todas las definiciones de las palabras.
+Tanto las definidas por wiktionary como las proporcionadas por el usuario.
+
+
+reporte.txt contendra los conflictos entre wiktionay y pattern.es
+
+Se debe estar conectado a internet para que wiktionay y pattern.es funcione.

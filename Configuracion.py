@@ -49,25 +49,28 @@ layout = [
 window = sg.Window('panel').Layout(layout)
 ok = True
 while ok:
-    button, values =  window.Read()
-    if button is None or button is 'Cancelar':
-        break
-    if button is 'Cambiar Fuente':
-        fuente = values['fuente']
-    if button is 'Agregar':
-        palabra = mostrar_palabra(values['pal'])
-        window.FindElement('dato').Update(palabra)
-        clasificar_pal(values['pal'])
-    if button is 'Eliminar':
-        pal = eliminarPalabra(values['pal'])
-        window.FindElement('dato').Update(pal)
-    if button is 'Comenzar':
-        cantV = int(values['X1'])  # SON LOS VALORES DE LOS SLIDER QUE REFERENCIAN A LAS CANTIDADES
-        cantS = int(values['X2'])  # X DE CADA TIPO DE PALABRA QUE EL DOCENTE QUIERE MOSTRAR
-        cantA = int(values['X3'])  
-        dic = getListaResultante(cantV, cantA, cantS, values['roVe'], values['veVe'], values['amVe'], values['roSu'], values['veSu'], values['amSu'], values['roAd'], values['veAd'], values['amAd'])
-        TipoAyudas = (values['ayuda'],values['def'])
-        tablero(dic['maxPal'], dic, values['M'], values['h'],TipoAyudas)
-    if button is 'Cancelar':
-        sys.exit()
+    try:
+        button, values =  window.Read()
+        if button is None or button is 'Cancelar':
+            break
+        if button is 'Cambiar Fuente':
+            fuente = values['fuente']
+        if button is 'Agregar':
+            palabra = mostrar_palabra(values['pal'])
+            window.FindElement('dato').Update(palabra)
+            clasificar_pal(values['pal'])
+        if button is 'Eliminar':
+            pal = eliminarPalabra(values['pal'])
+            window.FindElement('dato').Update(pal)
+        if button is 'Comenzar':
+            cantV = int(values['X1'])  # SON LOS VALORES DE LOS SLIDER QUE REFERENCIAN A LAS CANTIDADES
+            cantS = int(values['X2'])  # X DE CADA TIPO DE PALABRA QUE EL DOCENTE QUIERE MOSTRAR
+            cantA = int(values['X3'])
+            dic = getListaResultante(cantV, cantA, cantS, values['roVe'], values['veVe'], values['amVe'], values['roSu'], values['veSu'], values['amSu'], values['roAd'], values['veAd'], values['amAd'])
+            TipoAyudas = (values['ayuda'],values['def'])
+            tablero(dic['maxPal'], dic, values['M'], values['h'],TipoAyudas)
+        if button is 'Cancelar':
+            sys.exit()
+    except ValueError:
+        sg.Popup('Todos los campos son obligatorios.')
 window.Close()

@@ -8,6 +8,28 @@ import sys
 
 
 
+
+def mostrar_reporte(fuentesTitulo,fuenteTexto):
+    a = open('reporte.txt','r')
+    lista = a.readlines()
+
+    layout = [[sg.Text(lista[0],size=(20, 1),font = fuentesTitulo)],
+
+              [sg.Listbox(values = lista[1:],size=(50,10),font=fuenteTexto)],
+
+              [sg.Text(''),sg.ReadButton('Ok')],
+
+            ]
+
+    window = sg.Window('panel').Layout(layout)
+
+    button, values = window.Read()
+    if button is 'Ok':
+        window.Close()
+    if button is None:
+        window.Close()
+
+
 def config():
 
     diccionario = {}
@@ -18,7 +40,7 @@ def config():
               [sg.Text('Configuracion del juego', size=(30, 1), justification='center', font=(fuente, 25), text_color='lightgreen')],
               [sg.Frame(
                   layout=[
-                            [sg.Text('Ingrese palabra',font=(fuente,12), size=(15, 1)), sg.InputText(key='pal'), sg.Button('Agregar', button_color=('white', 'orange')), sg.Button('Eliminar', button_color=('white', 'red'))],
+                            [sg.Text('Ingrese palabra',font=(fuente,12), size=(15, 1)), sg.InputText(key='pal'), sg.Button('Agregar', button_color=('white', 'orange')), sg.Button('Eliminar', button_color=('white', 'red')),sg.Button('Mostrar reporte')],
                             [sg.Multiline(key='dato', size=(70,1), font='Courier 10')],
                          ], title='AgregarPalabras', title_color='lightgreen'
               )],
@@ -81,6 +103,8 @@ def config():
             if button is 'Cancelar':
                 window.Close()
                 break
+            if button is 'Mostrar reporte':
+                mostrar_reporte('Arial','Comic')
         except ValueError:
             sg.Popup('Todos los campos son obligatorios.')
     return diccionario

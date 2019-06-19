@@ -155,20 +155,25 @@ def ingresar_definicion ():
     except UnboundLocalError:
         None
 
-def devuelve_definicion(unstring):
 
+
+
+def devuelve_definicion(unstring, clasificacion):
 
     '''
     Devuelve una definicion dada por wiktionary, en casa de que no haya se le pide al usuario que ingrese una
     '''
 
     cat = Wiktionary(license=None, throttle=5.0, language='ES').search(unstring)
-    l = []
-    for i in cat.sections:
-        l.append(i.title)
-        if i.title == 'Etimología':
-            definicion = i.content[19:]   # para que no escriba: Etimología [editar] entonces se guarda desde la pos 19 en adelante.
-    if 'Etimología' not in l:
+    definicion = ''
+    encontre = False
+    for elem in cat.sections:
+        if clasificacion in elem.title.lower():
+            encontre = True
+        if encontre:
+            definicion = elem.content.split('1')[1].split('.2')[0].split('*')[0]
+            break
+    if definicion == '':
         definicion = ingresar_definicion()
     return definicion
 
@@ -188,66 +193,75 @@ def clasificar_pal(Un_string):
     pal = Wiktionary(license=None, throttle=5.0, language='ES').search(Un_string)
     try:
         secciones=[]
+        ok = False
         for section in pal.categories:
             secciones.append(section)
         if ('ES:Verbos' in secciones) and (buscar_pattern(Un_string) == 'VB'):
             if Un_string not in lista_verbos:
                 lista_verbos.append(Un_string)
-                definicion = devuelve_definicion(Un_string)
+                definicion = devuelve_definicion(Un_string,'verbo')
                 reporte(definicion,'ArchivoLocal')
+                ok = True
         elif (buscar_pattern(Un_string) != 'VB') and ('ES:Verbos' in secciones):   #si no coincide con pattern
             if Un_string not in lista_verbos:
                 lista_verbos.append(Un_string)
                 msj = f'la palabra {Un_string} no se encuentra en pattern pero si en Wiktionary.\n'
                 reporte(msj,'reporte')
-                definicion = devuelve_definicion(Un_string)
+                definicion = devuelve_definicion(Un_string,'verbo')
                 reporte(definicion,'ArchivoLocal')
+                ok = True
         elif 'ES:Verbos' not in secciones and buscar_pattern(Un_string) == 'VB':   #si coincide con wiktionary
             if Un_string not in lista_verbos:
                 lista_verbos.append(Un_string)
                 msj = ingresar_definicion()
                 reporte(msj,'ArchivoLocal')
+                ok = True
 
 
 
         if 'ES:Adjetivos' in secciones and buscar_pattern(Un_string) == 'JJ':
             if Un_string not in lista_adjetivos:
                 lista_adjetivos.append(Un_string)
-                definicion = devuelve_definicion(Un_string)
+                definicion = devuelve_definicion(Un_string,'sustantivos')
                 reporte(definicion,'ArchivoLocal')
+                ok = True
         elif buscar_pattern(Un_string) != 'JJ' and 'ES:Adjetivos' in secciones:
             if Un_string not in lista_adjetivos:
                 lista_adjetivos.append(Un_string)
                 msj = f'la palabra {Un_string} no se encuentra en pattern pero si en Wiktionary.\n'
                 reporte(msj,'reporte')
-                definicion = devuelve_definicion(Un_string)
+                definicion = devuelve_definicion(Un_string,'sustantivos')
                 reporte(definicion,'ArchivoLocal')
+                ok = True
         elif 'ES:Adjetivos' not in secciones and buscar_pattern(Un_string) == 'JJ':
             if Un_string not in lista_adjetivos:
                 lista_adjetivos.append(Un_string)
                 msj = ingresar_definicion()
                 reporte(msj,'ArchivoLocal')
+                ok = True
 
-                
         if 'ES:Sustantivos' in secciones and buscar_pattern(Un_string) == 'NN':
             if Un_string not in lista_sustantivos:
                 lista_sustantivos.append(Un_string)
-                definicion = devuelve_definicion(Un_string)
+                definicion = devuelve_definicion(Un_string,'adjetivo')
                 reporte(definicion,'ArchivoLocal')
+                ok = True
         elif buscar_pattern(Un_string) != 'NN' and 'ES:Sustantivos' in secciones:
             if Un_string not in lista_sustantivos:
                 lista_sustantivos.append(Un_string)
                 msj = f'la palabra {Un_string} no se encuentra en pattern pero si en Wiktionary.\n'
                 reporte(msj,'reporte')
-                definicion = devuelve_definicion(Un_string)
+                definicion = devuelve_definicion(Un_string,'adjetivo')
                 reporte(definicion,'ArchivoLocal')
+                ok = True
         elif 'ES:Sustantivos' not in secciones and buscar_pattern(Un_string) == 'NN':
             if Un_string not in lista_sustantivos:
                 lista_sustantivos.append(Un_string)
                 msj = ingresar_definicion()
                 reporte(msj,'ArchivoLocal')
+                ok = True
 
-        else:
+        elif not ok:
             msj = f'la palabra {Un_string} no se encuentra en pattern y tampoco en Wiktionary.\n'
             reporte(msj, 'reporte')
     except AttributeError:

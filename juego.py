@@ -271,7 +271,6 @@ def tablero(long_maxPal,dic_palabras,M,ok,TipoAyuda):
                 color = definir_color(x.lower(),dic_palabras)
                 for i in todos_los_clik:
                     g.TKCanvas.itemconfig(dicColor[i]+1, fill= color)
-                print(palC)
                 lnue.remove(palC)                #se van eliminando las palabras encontradas
                 window.FindElement('ayuda').Update(lnue)
             #-------Se limpia todo lo que haya sido seleccionado--------#

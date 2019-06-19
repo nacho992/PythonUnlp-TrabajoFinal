@@ -2,13 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c632fdcf-9e77-4979-b284-498976c01c52" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/leeme.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reporte.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ArchivoLocal.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ArchivoLocal.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Configuracion.py" beforeDir="false" afterPath="$PROJECT_DIR$/Configuracion.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/juego.py" beforeDir="false" afterPath="$PROJECT_DIR$/juego.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reporte.txt" beforeDir="false" afterPath="$PROJECT_DIR$/reporte.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -21,8 +19,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Configuracion.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="152">
-              <caret line="61" column="45" lean-forward="true" selection-start-line="61" selection-start-column="45" selection-end-line="61" selection-end-column="45" />
+            <state relative-caret-position="176">
+              <caret line="67" column="50" selection-start-line="67" selection-start-column="50" selection-end-line="67" selection-end-column="50" />
               <folding>
                 <element signature="e#0#24#0" expanded="true" />
               </folding>
@@ -45,8 +43,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/juego.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="312">
-              <caret line="184" column="52" lean-forward="true" selection-start-line="184" selection-start-column="52" selection-end-line="184" selection-end-column="52" />
+            <state relative-caret-position="221">
+              <caret line="293" column="30" selection-start-line="293" selection-start-column="30" selection-end-line="293" selection-end-column="30" />
               <folding>
                 <element signature="e#0#24#0" expanded="true" />
               </folding>
@@ -57,8 +55,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modulos.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="195" column="58" lean-forward="true" selection-start-line="195" selection-start-column="58" selection-end-line="195" selection-end-column="58" />
+            <state relative-caret-position="-406">
+              <caret line="52" column="4" selection-start-line="52" selection-start-column="4" selection-end-line="52" selection-end-column="4" />
             </state>
           </provider>
         </entry>
@@ -96,7 +94,7 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-8" />
-    <option name="y" value="1" />
+    <option name="y" value="2" />
     <option name="width" value="1934" />
     <option name="height" value="1037" />
   </component>
@@ -304,11 +302,18 @@
       <option name="project" value="LOCAL" />
       <updated>1560952078756</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="nueva actualizacion, Main">
+      <created>1560967764007</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1560967764007</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-6" y="1" width="1547" height="829" extended-state="0" />
+    <frame x="-6" y="2" width="1547" height="829" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.06588389" />
@@ -366,7 +371,8 @@
     <MESSAGE value="nueva actualizacion, seleccionar y deseleccionar casilla(letra)" />
     <MESSAGE value="nueva actualizacion, archivos" />
     <MESSAGE value="nueva actualizacion, modulo pattern" />
-    <option name="LAST_COMMIT_MESSAGE" value="nueva actualizacion, modulo pattern" />
+    <MESSAGE value="nueva actualizacion, Main" />
+    <option name="LAST_COMMIT_MESSAGE" value="nueva actualizacion, Main" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/borrador.py">
@@ -403,13 +409,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modulos.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="195" column="58" lean-forward="true" selection-start-line="195" selection-start-column="58" selection-end-line="195" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/patternPrueba.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="286">
@@ -420,10 +419,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/modulos.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-406">
+          <caret line="52" column="4" selection-start-line="52" selection-start-column="4" selection-end-line="52" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Configuracion.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="61" column="45" lean-forward="true" selection-start-line="61" selection-start-column="45" selection-end-line="61" selection-end-column="45" />
+        <state relative-caret-position="176">
+          <caret line="67" column="50" selection-start-line="67" selection-start-column="50" selection-end-line="67" selection-end-column="50" />
           <folding>
             <element signature="e#0#24#0" expanded="true" />
           </folding>
@@ -432,8 +438,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/juego.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="184" column="52" lean-forward="true" selection-start-line="184" selection-start-column="52" selection-end-line="184" selection-end-column="52" />
+        <state relative-caret-position="221">
+          <caret line="293" column="30" selection-start-line="293" selection-start-column="30" selection-end-line="293" selection-end-column="30" />
           <folding>
             <element signature="e#0#24#0" expanded="true" />
           </folding>

@@ -9,6 +9,7 @@ import sys
 
 
 def config():
+
     diccionario = {}
     diccionario['fin'] = 0
     sg.ChangeLookAndFeel('Dark')
@@ -95,6 +96,9 @@ def main():
         else:
             opcion = tablero(info['tam'],info['palabras'],info['Mayusculas'],info['sentidos'],info['ayudas'])
             if opcion is 'jugar':
+                info['palabras']['palSus'].clear()
+                info['palabras']['palAd'].clear()
+                info['palabras']['palVer'].clear()
                 continue
             else:
                 break

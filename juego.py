@@ -126,31 +126,23 @@ def procesar_palabras(matriz, nxn, palabras, esfila):
     return matriz
 
 
-def evaluar_palabra(palabra_evaluar,lnue,M):
+def evaluar_palabra(palabra_evaluar,lnue):
     """ Compara la palabra ingresada como parametro con cada elemento de de la lista """
     ok=True
     encontre = False
     i = 0
-    if M:
-        x = ''.join(['{}'.format(o) for o in palabra_evaluar])
-        while ok and (i < len(lnue)):
-            if lnue[i].upper() == x.upper():
-                encontre = True
-                ok = False
-            i+=1
-    else:
-        x = ''.join(['{}'.format(o) for o in palabra_evaluar])
-        while ok and (i < len(lnue)):
-            if lnue[i].lower() == x.lower():
-                encontre = True
-                ok = False
-            i+=1
+    x = ''.join(['{}'.format(o) for o in palabra_evaluar])
+    while ok and (i < len(lnue)):
+        if lnue[i].lower() == x.lower():
+            encontre = True
+            ok = False
+        i+=1
     return encontre
 
 
 def definir_color(un_string,dic):
     """ recibe una palabra a buscar en el diccionario, la busca y nos retorno un valor(color) del diccionaro """
-    color = 'aaaa'
+    color = 'red'
     if un_string in dic['palVer'][0]:
         color = dic['verbo']
     if un_string in dic['palAd'][0]:
@@ -191,8 +183,10 @@ def ventana_terminar(cantidad_pal,lnue):
         if button is 'OK':
             if values['v'] is True:
                 c = 'jugar'
+                window.Close()
                 break
             else:
+                window.Close()
                 break
     return c
 
@@ -215,7 +209,7 @@ def tablero(long_maxPal,dic_palabras,M,ok,TipoAyuda):
 
     lnue = []
     Lista_letras(dic_palabras,lnue)     #recibe el diccionario, devuelve una lista(lnue) de todas las palabras seleccionadas
-    nxn = long_maxPal + 1               #longuitud de la palabra mas larga
+    nxn = long_maxPal + 3               #longuitud de la palabra mas larga
     matriz = crearMatriz(nxn)
     matriz = procesar_palabras(matriz, nxn, lnue, ok)
     dato = completarMatriz(matriz, nxn)
@@ -266,17 +260,19 @@ def tablero(long_maxPal,dic_palabras,M,ok,TipoAyuda):
                 None 
         if button is 'Verificar Palabra / Limpiar selección':
 
-            encontre = evaluar_palabra(lista_click,lnue,M)
+            encontre = evaluar_palabra(lista_click,lnue)
             #-------si la seleccion coincide con alguna palabra--------#
             if encontre:
                 cantidad_pal -= 1
                 window.FindElement('cantPal').Update(cantidad_pal)
                 x = ''.join(['{}'.format(o) for o in lista_click])
+                palC = x.lower()
                 sg.Popup(f'Has Encontrado la palabra {x}')
                 color = definir_color(x.lower(),dic_palabras)
                 for i in todos_los_clik:
                     g.TKCanvas.itemconfig(dicColor[i]+1, fill= color)
-                lnue.remove(x)                #se van eliminando las palabras encontradas
+                print(palC)
+                lnue.remove(palC)                #se van eliminando las palabras encontradas
                 window.FindElement('ayuda').Update(lnue)
             #-------Se limpia todo lo que haya sido seleccionado--------#
             for i in todos_los_clik:
@@ -285,15 +281,17 @@ def tablero(long_maxPal,dic_palabras,M,ok,TipoAyuda):
             lista_click.clear()
             #-----------------------------------------------------------#
             if cantidad_pal == 0:
-                window.FindElement('Volver a jugar').Update(disabled=False)
+                window.FindElement('Volver al menu').Update(disabled=False)
                 sg.Popup('¡¡Has encontrado todas las palabras!!')
         c = ''
         if button is 'terminar':
             var = ventana_terminar(cantidad_pal, lnue)
             print(var)
             if var is 'jugar':
+                window.Close()
                 return var
             elif var is 'no':
+                window.Close()
                 return c
         if button is 'Volver al menu':
             c = 'jugar'

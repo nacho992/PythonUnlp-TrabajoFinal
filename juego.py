@@ -1,6 +1,8 @@
 import PySimpleGUI as sg
 import random
 import string
+
+
 caja = 15
 dic = {}   #letra en la coordenada
 dicColor = {} #coordenada

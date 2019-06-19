@@ -102,6 +102,12 @@ def getListaResultante(lv, la, ls, rV, vV, aV, rSus, vSus, aSus, rAd, vAd, aAd):
 
 
 def buscar_pattern(x):
+
+    '''
+    clasifica el string recbido como paramentro(x) en pattern, analizando la palabra, devuleve su clasificacion
+    sustantivo, adjetivo o verbo.
+    '''
+
     s = parse(x).split()
     for cada in s:
             for i in cada:
@@ -115,14 +121,22 @@ def buscar_pattern(x):
 
 
 def reporte (mensaje,nombre):
+
+    '''
+    recibe como parametro el nombre del archivo, se abre un contexto y solo escribie el mensaje en el arhivo
+    '''
+
     with open(nombre + '.txt','a+') as a:
-        try:
-            a.write(mensaje+'\n')
-        except TypeError:
-            None
+        a.write(mensaje+'\n')
+
 
 
 def ingresar_definicion ():
+
+    '''
+    Se ingresa una definicion por teclado por el usuario
+    '''
+
     layout = [[sg.Text('Ingrese definicion:', size=(15, 1)), sg.InputText(key='ms'), sg.Button('Agregar', button_color=('white', 'orange')),sg.Button('Cancelar', button_color=('white', 'orange'))]
     ]
     window = sg.Window('panel').Layout(layout)
@@ -142,22 +156,32 @@ def ingresar_definicion ():
         None
 
 def devuelve_definicion(unstring):
-  cat = Wiktionary(license=None, throttle=5.0, language='ES').search(unstring)
-  for i in cat.sections:
-    if i.title == 'Etimología':
-      definicion = i.content
-    else:
-        definicion = ''
-  return definicion
+
+
+    '''
+    Devuelve una definicion dada por wiktionary, en casa de que no haya se le pide al usuario que ingrese una
+    '''
+
+    cat = Wiktionary(license=None, throttle=5.0, language='ES').search(unstring)
+    l = []
+    for i in cat.sections:
+        l.append(i.title)
+        if i.title == 'Etimología':
+            definicion = i.content[19:]   # para que no escriba: Etimología [editar] entonces se guarda desde la pos 19 en adelante.
+    if 'Etimología' not in l:
+        definicion = ingresar_definicion()
+    return definicion
 
 
 
 def clasificar_pal(Un_string):
     '''
 
-    #Se clasifica la palabra segun sea adjetivo, verbo o sustantivo y se agrega a sus correspondiente lista, en caso de que no se pueda se generan reportes
-    #si coinside solo con Wiktionary, se pide que ingrese la definicion de la palabra
-
+    #Se clasifica la palabra segun sea adjetivo, verbo o sustantivo mediante pattren.es y wiktionary
+    y se agrega a sus correspondiente lista y se guarda la definicion dicha por wiktinary de la palabra,
+    en caso de que no coincidan se generan reportes de las palabras que tienen conflictos entre los modulos.
+    #si coinside solo con Wiktionary, se pide que ingrese la definicion de la palabra, en los demas casos
+    se tomara la definicion solo de Wiktionary y siempre se guararan en un archivo local.
     '''
 
 
@@ -171,16 +195,19 @@ def clasificar_pal(Un_string):
                 lista_verbos.append(Un_string)
                 definicion = devuelve_definicion(Un_string)
                 reporte(definicion,'ArchivoLocal')
-        elif (buscar_pattern(Un_string) != 'VB') and ('ES:Verbos' in secciones):
+        elif (buscar_pattern(Un_string) != 'VB') and ('ES:Verbos' in secciones):   #si no coincide con pattern
             if Un_string not in lista_verbos:
                 lista_verbos.append(Un_string)
                 msj = f'la palabra {Un_string} no se encuentra en pattern pero si en Wiktionary.\n'
                 reporte(msj,'reporte')
-        elif 'ES:Verbos' not in secciones and buscar_pattern(Un_string) == 'VB':
+                definicion = devuelve_definicion(Un_string)
+                reporte(definicion,'ArchivoLocal')
+        elif 'ES:Verbos' not in secciones and buscar_pattern(Un_string) == 'VB':   #si coincide con wiktionary
             if Un_string not in lista_verbos:
                 lista_verbos.append(Un_string)
                 msj = ingresar_definicion()
                 reporte(msj,'ArchivoLocal')
+
 
 
         if 'ES:Adjetivos' in secciones and buscar_pattern(Un_string) == 'JJ':
@@ -193,11 +220,14 @@ def clasificar_pal(Un_string):
                 lista_adjetivos.append(Un_string)
                 msj = f'la palabra {Un_string} no se encuentra en pattern pero si en Wiktionary.\n'
                 reporte(msj,'reporte')
+                definicion = devuelve_definicion(Un_string)
+                reporte(definicion,'ArchivoLocal')
         elif 'ES:Adjetivos' not in secciones and buscar_pattern(Un_string) == 'JJ':
             if Un_string not in lista_adjetivos:
                 lista_adjetivos.append(Un_string)
                 msj = ingresar_definicion()
                 reporte(msj,'ArchivoLocal')
+
                 
         if 'ES:Sustantivos' in secciones and buscar_pattern(Un_string) == 'NN':
             if Un_string not in lista_sustantivos:
@@ -209,10 +239,16 @@ def clasificar_pal(Un_string):
                 lista_sustantivos.append(Un_string)
                 msj = f'la palabra {Un_string} no se encuentra en pattern pero si en Wiktionary.\n'
                 reporte(msj,'reporte')
+                definicion = devuelve_definicion(Un_string)
+                reporte(definicion,'ArchivoLocal')
         elif 'ES:Sustantivos' not in secciones and buscar_pattern(Un_string) == 'NN':
             if Un_string not in lista_sustantivos:
                 lista_sustantivos.append(Un_string)
                 msj = ingresar_definicion()
                 reporte(msj,'ArchivoLocal')
+
+        else:
+            msj = f'la palabra {Un_string} no se encuentra en pattern y tampoco en Wiktionary.\n'
+            reporte(msj, 'reporte')
     except AttributeError:
         sg.Popup('Ingrese una palabra valida')

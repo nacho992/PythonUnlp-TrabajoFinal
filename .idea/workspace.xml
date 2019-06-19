@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c632fdcf-9e77-4979-b284-498976c01c52" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ArchivoLocal.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ArchivoLocal.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Configuracion.py" beforeDir="false" afterPath="$PROJECT_DIR$/Configuracion.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/juego.py" beforeDir="false" afterPath="$PROJECT_DIR$/juego.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modulos.py" beforeDir="false" afterPath="$PROJECT_DIR$/modulos.py" afterDir="false" />
     </list>
@@ -17,11 +15,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Configuracion.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="123">
-              <caret line="53" column="13" lean-forward="true" selection-start-line="53" selection-start-column="13" selection-end-line="53" selection-end-column="13" />
+            <state relative-caret-position="53">
+              <caret line="50" column="9" lean-forward="true" selection-start-line="51" selection-start-column="7" selection-end-line="51" selection-end-column="8" />
               <folding>
                 <element signature="e#0#24#0" expanded="true" />
               </folding>
@@ -30,10 +28,13 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modulos.py">
+        <entry file="file://$PROJECT_DIR$/patternPrueba.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="69">
-              <caret line="191" column="26" selection-start-line="191" selection-start-column="26" selection-end-line="191" selection-end-column="26" />
+            <state relative-caret-position="264">
+              <caret line="16" column="74" lean-forward="true" selection-start-line="16" selection-start-column="6" selection-end-line="16" selection-end-column="74" />
+              <folding>
+                <element signature="e#1#54#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -41,11 +42,20 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/juego.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="229" column="41" selection-start-line="229" selection-start-column="41" selection-end-line="229" selection-end-column="41" />
+            <state relative-caret-position="-4589">
+              <caret line="4" selection-start-line="4" selection-end-line="4" />
               <folding>
                 <element signature="e#0#24#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/modulos.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="185">
+              <caret line="238" column="51" lean-forward="true" selection-start-line="238" selection-start-column="51" selection-end-line="238" selection-end-column="51" />
             </state>
           </provider>
         </entry>
@@ -65,11 +75,11 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/borrador.py" />
-        <option value="$PROJECT_DIR$/modulos.py" />
-        <option value="$PROJECT_DIR$/patternPrueba.py" />
-        <option value="$PROJECT_DIR$/Configuracion.py" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/Configuracion.py" />
         <option value="$PROJECT_DIR$/juego.py" />
+        <option value="$PROJECT_DIR$/patternPrueba.py" />
+        <option value="$PROJECT_DIR$/modulos.py" />
       </list>
     </option>
   </component>
@@ -223,9 +233,9 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.Configuracion" />
-        <item itemvalue="Python.juego" />
         <item itemvalue="Python.patternPrueba" />
         <item itemvalue="Python.modulos" />
+        <item itemvalue="Python.juego" />
         <item itemvalue="Python.borrador" />
       </list>
     </recent_temporary>
@@ -262,14 +272,28 @@
       <option name="project" value="LOCAL" />
       <updated>1560894308472</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="nueva actualizacion, seleccionar y deseleccionar casilla(letra)">
+      <created>1560898474139</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1560898474139</updated>
+    </task>
+    <task id="LOCAL-00005" summary="nueva actualizacion, archivos">
+      <created>1560905161408</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1560905161408</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1552" height="840" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1976593" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.0656697" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -302,16 +326,11 @@
     <MESSAGE value="se deben cambiar los docString" />
     <MESSAGE value="se cambio el proceso procesar_palbras" />
     <MESSAGE value="nueva actualizacion, opciones de ayuda" />
-    <option name="LAST_COMMIT_MESSAGE" value="nueva actualizacion, opciones de ayuda" />
+    <MESSAGE value="nueva actualizacion, seleccionar y deseleccionar casilla(letra)" />
+    <MESSAGE value="nueva actualizacion, archivos" />
+    <option name="LAST_COMMIT_MESSAGE" value="nueva actualizacion, archivos" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/patternPrueba.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="69">
-          <caret line="101" selection-start-line="101" selection-end-line="101" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/borrador.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="176">
@@ -326,30 +345,50 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modulos.py">
+    <entry file="file://N:/facultad/Python/venv/Lib/site-packages/pattern/web/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="69">
-          <caret line="191" column="26" selection-start-line="191" selection-start-column="26" selection-end-line="191" selection-end-column="26" />
+        <state relative-caret-position="64">
+          <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
+          <folding>
+            <element signature="n#!!doc" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/juego.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="229" column="41" selection-start-line="229" selection-start-column="41" selection-end-line="229" selection-end-column="41" />
+        <state relative-caret-position="-4589">
+          <caret line="4" selection-start-line="4" selection-end-line="4" />
           <folding>
             <element signature="e#0#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/patternPrueba.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="16" column="74" lean-forward="true" selection-start-line="16" selection-start-column="6" selection-end-line="16" selection-end-column="74" />
+          <folding>
+            <element signature="e#1#54#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Configuracion.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="123">
-          <caret line="53" column="13" lean-forward="true" selection-start-line="53" selection-start-column="13" selection-end-line="53" selection-end-column="13" />
+        <state relative-caret-position="53">
+          <caret line="50" column="9" lean-forward="true" selection-start-line="51" selection-start-column="7" selection-end-line="51" selection-end-column="8" />
           <folding>
             <element signature="e#0#24#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modulos.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="185">
+          <caret line="238" column="51" lean-forward="true" selection-start-line="238" selection-start-column="51" selection-end-line="238" selection-end-column="51" />
         </state>
       </provider>
     </entry>

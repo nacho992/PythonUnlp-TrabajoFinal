@@ -14,25 +14,30 @@ l_palAbuscar_sus = []
 l_palAbuscar_ad = []
 
 
+def limpiarL():
+    lista_palabras.clear()
+
+
+
 def mostrar_palabra (pal):
-    '''
+    """
         agrego la palabra una lista general,
         para asi poder formatear su salida en la ventana,
         y tener un control de todas las palabras que se ingresaron, si
         el docente, decide eliminar un palabra lo pueda hacer sin problemas
         ademas, de eliminarse en la lista general, se verificara en las listas correspondientes
         a esa palabras, si existe se eliminan tambien, sino sale un cartel de alerta
-    '''
+    """
     lista_palabras.append(pal)
     resultado = ', '.join(['{}'.format(o) for o in lista_palabras])
     return resultado
 
 
 def eliminarPalabra(palabra):
-    '''
+    """
         este modulo elimina una palabra que se recibe por parametro,
         e informa de que tipo de palabra fue la que se elimino
-    '''
+    """
     if palabra in lista_palabras:
         lista_palabras.remove(palabra)
         pal = ', '.join(['{}'.format(o) for o in lista_palabras])
@@ -51,7 +56,7 @@ def eliminarPalabra(palabra):
 
 
 def getListaResultante(lv, la, ls, rV, vV, aV, rSus, vSus, aSus, rAd, vAd, aAd):
-    '''
+    """
         lv --> LIMITE DE VERBOS
         la --> LIMITE DE ADJETIVOS
         ls --> LIMITE DE SUSTANTIVOS
@@ -60,11 +65,11 @@ def getListaResultante(lv, la, ls, rV, vV, aV, rSus, vSus, aSus, rAd, vAd, aAd):
         es decir ej:
         si selecciona 3 verbos, 2 sustantivos, 1 adjetivo
 
-    '''
-    l_palAbuscar_verbo.append(lista_verbos[ : lv])
-    l_palAbuscar_ad.append(lista_adjetivos[ : la])
-    l_palAbuscar_sus.append(lista_sustantivos[ : ls])
-    lisR =  lista_verbos[ : lv] + lista_adjetivos[ : la] + lista_sustantivos[ : ls]
+    """
+    l_palAbuscar_verbo.append(lista_verbos[: lv])
+    l_palAbuscar_ad.append(lista_adjetivos[: la])
+    l_palAbuscar_sus.append(lista_sustantivos[: ls])
+    lisR = lista_verbos[: lv] + lista_adjetivos[: la] + lista_sustantivos[: ls]
     maxPal = max(lisR, key=len)
     dic = {}
     if rV:
@@ -96,17 +101,17 @@ def getListaResultante(lv, la, ls, rV, vV, aV, rSus, vSus, aSus, rAd, vAd, aAd):
     elif aAd:
         dic['adjetivo'] = 'yellow'
         dic['palAd'] = l_palAbuscar_ad
-    dic['maxPal']=len(maxPal)
+    dic['maxPal'] = len(maxPal)
     return dic
 
 
 
 def buscar_pattern(x):
 
-    '''
-    clasifica el string recbido como paramentro(x) en pattern, analizando la palabra, devuleve su clasificacion
-    sustantivo, adjetivo o verbo.
-    '''
+    """
+        clasifica el string recbido como paramentro(x) en pattern, analizando la palabra, devuleve su clasificacion
+        sustantivo, adjetivo o verbo.
+    """
 
     s = parse(x).split()
     for cada in s:
@@ -122,47 +127,42 @@ def buscar_pattern(x):
 
 def reporte (mensaje,nombre):
 
-    '''
-    recibe como parametro el nombre del archivo, se abre un contexto y solo escribie el mensaje en el arhivo
-    '''
+    """
+        recibe como parametro el nombre del archivo, se abre un contexto y solo escribie el mensaje en el arhivo
+    """
 
     with open(nombre + '.txt','a+') as a:
         a.write(mensaje+'\n')
 
 
-
 def ingresar_definicion ():
 
-    '''
-    Se ingresa una definicion por teclado por el usuario
-    '''
+    """
+        Se ingresa una definicion por teclado por el usuario
+    """
 
-    layout = [[sg.Text('Ingrese definicion:', size=(15, 1)), sg.InputText(key='ms'), sg.Button('Agregar', button_color=('white', 'orange')),sg.Button('Cancelar', button_color=('white', 'orange'))]
+    layout = [[sg.Text('Ingrese definicion:', size=(15, 1)), sg.InputText(key='ms'), sg.Button('Agregar', button_color=('white', 'orange'))]
     ]
+    msj = 999
     window = sg.Window('panel').Layout(layout)
-    ok=True
+    ok = True
     while ok:
-        button, values =  window.Read()
+        button, values = window.Read()
         if button == 'Agregar':
             msj = values['ms']
             ok = False
-        if button is None or button is 'Cancelar':
-            break
-            msj = ''
+        if msj == '':
+            sg.Popup('Es obligatorio ingresar una definicion')
+            ok = True
     window.Close()
-    try:
-        return msj
-    except UnboundLocalError:
-        None
-
-
+    return msj
 
 
 def devuelve_definicion(unstring, clasificacion):
 
-    '''
-    Devuelve una definicion dada por wiktionary, en casa de que no haya se le pide al usuario que ingrese una
-    '''
+    """
+        Devuelve una definicion dada por wiktionary, en casa de que no haya se le pide al usuario que ingrese una
+    """
 
     cat = Wiktionary(license=None, throttle=5.0, language='ES').search(unstring)
     definicion = ''
@@ -178,21 +178,18 @@ def devuelve_definicion(unstring, clasificacion):
     return definicion
 
 
-
 def clasificar_pal(Un_string):
-    '''
-
-    #Se clasifica la palabra segun sea adjetivo, verbo o sustantivo mediante pattren.es y wiktionary
-    y se agrega a sus correspondiente lista y se guarda la definicion dicha por wiktinary de la palabra,
-    en caso de que no coincidan se generan reportes de las palabras que tienen conflictos entre los modulos.
-    #si coinside solo con Wiktionary, se pide que ingrese la definicion de la palabra, en los demas casos
-    se tomara la definicion solo de Wiktionary y siempre se guararan en un archivo local.
-    '''
-
+    """
+        Se clasifica la palabra segun sea adjetivo, verbo o sustantivo mediante pattren.es y wiktionary
+        y se agrega a sus correspondiente lista y se guarda la definicion dicha por wiktinary de la palabra,
+        en caso de que no coincidan se generan reportes de las palabras que tienen conflictos entre los modulos.
+        si coinside solo con Wiktionary, y no se obtiene un definicion, se pide que ingrese la definicion de la palabra, en los demas casos
+        se tomara la definicion solo de Wiktionary y siempre se guararan en un archivo local.
+    """
 
     pal = Wiktionary(license=None, throttle=5.0, language='ES').search(Un_string)
     try:
-        secciones=[]
+        secciones = []
         ok = False
         for section in pal.categories:
             secciones.append(section)
@@ -216,8 +213,6 @@ def clasificar_pal(Un_string):
                 msj = ingresar_definicion()
                 reporte(msj,'ArchivoLocal')
                 ok = True
-
-
 
         if 'ES:Adjetivos' in secciones and buscar_pattern(Un_string) == 'JJ':
             if Un_string not in lista_adjetivos:
@@ -250,7 +245,7 @@ def clasificar_pal(Un_string):
             if Un_string not in lista_sustantivos:
                 lista_sustantivos.append(Un_string)
                 msj = f'la palabra {Un_string} no se encuentra en pattern pero si en Wiktionary.\n'
-                reporte(msj,'reporte')
+                reporte(msj, 'reporte')
                 definicion = devuelve_definicion(Un_string,'adjetivo')
                 reporte(definicion,'ArchivoLocal')
                 ok = True
@@ -258,7 +253,7 @@ def clasificar_pal(Un_string):
             if Un_string not in lista_sustantivos:
                 lista_sustantivos.append(Un_string)
                 msj = ingresar_definicion()
-                reporte(msj,'ArchivoLocal')
+                reporte(msj, 'ArchivoLocal')
                 ok = True
 
         elif not ok:

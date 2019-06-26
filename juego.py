@@ -4,9 +4,8 @@ import string
 
 
 caja = 15
-dic = {}   #letra en la coordenada
-dicColor = {} #coordenada
-listaT = []
+dic = {}   # letra en la coordenada
+dicColor = {}  # coordenada
 colorTablero = 'dimgrey'
 
 
@@ -18,20 +17,7 @@ def obtener_datosArch(arch):
     return datos
 
 
-def Lista_letras(palabras,lnue):
-    """ lista todas las palabras que haya en el diccionario """
-    for cadaLista in range(len(palabras['palVer'])):
-        for i in palabras['palVer']:
-            for pal in i:
-                lnue.append(pal)
-    for cadaLista in range(len(palabras['palSus'])):
-        for i in palabras['palSus']:
-            for pal in i:
-                lnue.append(pal)
-    for cadaLista in range(len(palabras['palAd'])):
-        for i in palabras['palAd']:
-            for pal in i:
-                lnue.append(pal)
+
 
 
 def crearMatriz(nxn):
@@ -131,30 +117,27 @@ def procesar_palabras(matriz, nxn, palabras, esfila):
     return matriz
 
 
-def evaluar_palabra(palabra_evaluar, lnue):
-    """ Compara la palabra ingresada como parametro con cada elemento de de la lista """
-    ok = True
-    encontre = False
-    i = 0
-    x = ''.join(['{}'.format(o) for o in palabra_evaluar])
-    while ok and (i < len(lnue)):
-        if lnue[i].lower() == x.lower():
-            encontre = True
-            ok = False
-        i += 1
-    return encontre
 
 
 def definir_color(un_string, dic):
     """ recibe una palabra a buscar en el diccionario, la busca y nos retorno un valor(color) del diccionaro """
     color = 'red'
-    if un_string in dic['palVer'][0]:
-        color = dic['verbo']
-    if un_string in dic['palAd'][0]:
-        color = dic['adjetivo']
-    if un_string in dic['palSus'][0]:
-        color = dic['sustantivo']
-    return color
+    encontre = False
+    try:
+        if un_string in dic['palVer'][0]:
+            color = dic['verbo']
+            encontre = True
+        elif un_string in dic['palAd'][0]:
+            color = dic['adjetivo']
+            encontre = True
+        elif un_string in dic['palSus'][0]:
+            color = dic['sustantivo']
+            encontre = True
+        else:
+          sg.Popup('La palabra no existe')
+    except IndexError:
+        color = 'dimgrey'
+    return encontre, color
 
         
 def graficar_matrix(mt, nxn, d, M):
@@ -204,7 +187,7 @@ def ventana_terminar(cantidad_pal, lnue):
     return c
 
 
-def tablero(long_maxPal, dic_palabras, M, ok, TipoAyuda):
+def tablero(lnue,long_maxPal, dic_palabras, M, ok, TipoAyuda):
     """
        en esta funcion se encarga de armar la interface del tablero, e interactuar con todos lo modulos
        iniciando con la creacion de nuestra matriz, para esto se toma la longitud de la palabra mas grande + 3
@@ -216,7 +199,7 @@ def tablero(long_maxPal, dic_palabras, M, ok, TipoAyuda):
     sg.ChangeLookAndFeel('Dark')
     layout = [
             [sg.Text('sopa de letras', text_color='red', size=(10, 5))],
-            [sg.Graph((800, 500), (0, 250), (250, 0), key='_dibujar_', change_submits=True, drag_submits=False)],
+            [sg.Graph((400, 400), (0, 150), (150, 0), key='_dibujar_', change_submits=True, drag_submits=False)],
             [sg.Frame(
                             layout=[
                                         [sg.Text('Cantidad de palabras restantes :'), sg.Text('', key='cantPal')],
@@ -233,24 +216,24 @@ def tablero(long_maxPal, dic_palabras, M, ok, TipoAyuda):
     g = window.FindElement('_dibujar_')
     window.FindElement('Volver al menu').Update(disabled=True)
 
-    lnue = []
-    Lista_letras(dic_palabras, lnue)     # recibe el diccionario, devuelve una lista(lnue) de todas las palabras seleccionadas
     nxn = long_maxPal + 3               # longuitud de la palabra mas larga
     matriz = crearMatriz(nxn)
     matriz = procesar_palabras(matriz, nxn, lnue, ok)
     dato = completarMatriz(matriz, nxn)
     graficar_matrix(dato, nxn, g, M)
-    lista_click = []                    # esta lista contendra las letras que seran evaluadas con las palabras de la lista(lnue)
-    todos_los_clik = []                 # todas las cooredenadas donde se hizo click en el tablero
+    palC = ''  # esta lista contendra las letras que seran evaluadas con las palabras de la lista(lnue)
     cantidad_pal = len(lnue)
     palabrasBuscadas = '\n'.join(['{}'.format(p) for p in lnue])
     window.FindElement('cantPal').Update(cantidad_pal)
     defPal = obtener_datosArch('ArchivoLocal.txt')  # SE OBTIENEN LAS DEFINICIONES GUARDADAS EN UN ARCHIVO LOCAL
+    todos_los_clik = []  # todas las cooredenadas donde se hizo click en el tablero
+    coordenadas_encontradas = []
 
 
 
 
-    #--------SE EVALUAN LAS CONDICIONES DE AYUDA-------
+
+    #--------SE EVALUAN LAS CONDICIONES DE AYUDA-------#
     if TipoAyuda[0] and TipoAyuda[1]:
         window.FindElement('def').Update(defPal)
         window.FindElement('ayuda').Update(palabrasBuscadas)
@@ -276,47 +259,48 @@ def tablero(long_maxPal, dic_palabras, M, ok, TipoAyuda):
 
     while True:
         button, values = window.Read()
-        if button is None or button is 'cancelar':
+        if button is None:
             break
         puntero = values['_dibujar_']
         if button is '_dibujar_':
             if puntero == (None, None):
                 continue
-            try:
-                coorX = puntero[0]//caja
-                coorY = puntero[1]//caja
-                click = (coorX, coorY)
-                #------------marcar y desmarcar letras------------#
-                if click in todos_los_clik:
-                    g.Update(g.TKCanvas.itemconfig(dicColor[click], fill=colorTablero))
-                    todos_los_clik.remove(click)
-                    lista_click.remove(dic[click])
-                else:
+            coorX = puntero[0] // caja
+            coorY = puntero[1] // caja
+            click = (coorX, coorY)
+            # ------------marcar y desmarcar letras------------#
+            if click in dic.keys():  # si esta en el margen de nuestra matriz creada
+                if click in coordenadas_encontradas:
+                    print()
+                elif click not in todos_los_clik:
                     g.TKCanvas.itemconfig(dicColor[click], fill="blue")
                     todos_los_clik.append(click)  # coordenadas
-                    lista_click.append(dic[click]) # letras
-            except KeyError:
-                None 
+                    palC = palC + dic[click]  # letras
+                else:
+                    g.TKCanvas.itemconfig(dicColor[click], fill=colorTablero)
+                    todos_los_clik.remove(click)
+                    palC = palC[:-1]
         if button is 'Verificar Palabra / Limpiar selección':
 
-            encontre = evaluar_palabra(lista_click, lnue)
+            encontre, color = definir_color(palC, dic_palabras)
             #-------si la seleccion coincide con alguna palabra--------#
             if encontre:
                 cantidad_pal -= 1
                 window.FindElement('cantPal').Update(cantidad_pal)
-                x = ''.join(['{}'.format(o) for o in lista_click])
-                palC = x.lower()
-                sg.Popup(f'Has Encontrado la palabra {x}')
-                color = definir_color(x.lower(),dic_palabras)
+                sg.Popup(f'Has Encontrado la palabra {palC}')
                 for i in todos_los_clik:
-                    g.TKCanvas.itemconfig(dicColor[i]+1, fill= color)
-                lnue.remove(palC)                #se van eliminando las palabras encontradas
+                    g.Update(g.TKCanvas.itemconfig(dicColor[i], fill= color)) #concatenar + 1 a dicolor para pintar solo letra
+                    coordenadas_encontradas.append(i)
+                lnue.remove(palC)  # se van eliminando las palabras encontradas
                 window.FindElement('ayuda').Update(lnue)
-            #-------Se limpia_todo lo que haya sido seleccionado--------#
-            for i in todos_los_clik:
-                g.Update(g.TKCanvas.itemconfig(dicColor[i], fill=colorTablero))
-            todos_los_clik.clear()
-            lista_click.clear()
+                todos_los_clik.clear()
+                palC = ''
+            else:
+                #-------Se limpia_todo lo que haya sido seleccionado--------#
+                for i in todos_los_clik:
+                    g.Update(g.TKCanvas.itemconfig(dicColor[i], fill=colorTablero))
+                todos_los_clik.clear()
+                palC = ''
             #-----------------------------------------------------------#
             if cantidad_pal == 0:
                 window.FindElement('Volver al menu').Update(disabled=False)

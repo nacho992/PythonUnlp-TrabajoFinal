@@ -14,22 +14,24 @@ def mostrar_reporte(fuentesTitulo, fuenteTexto):
         :return: nada esta funcion solo se encarga de mostrarle al docente la informacion
         de las palabras que no fueron admitidas por patterns/wiki, o wiki si, patterns no, o patterns si y wiki no
     """
-    a = open('reporte.txt', 'r')
-    lista = a.readlines()
-    layout = [
-        [sg.Text('PROBLEMAS!!', size=(20, 1), font=fuentesTitulo)],
-        [sg.Listbox(values=lista[1:], size=(70, 10), font=fuenteTexto)],
-        [sg.Text(''), sg.ReadButton('Ok')],
+    try:
+        a = open('reporte.txt', 'r')
+        lista = a.readlines()
+        layout = [
+            [sg.Text('PROBLEMAS!!', size=(20, 1), font=fuentesTitulo)],
+            [sg.Listbox(values=lista[:], size=(70, 10), font=fuenteTexto)],
+            [sg.Text(''), sg.ReadButton('Ok')],
 
-    ]
+        ]
+        window = sg.Window('panel').Layout(layout)
 
-    window = sg.Window('panel').Layout(layout)
-
-    button, values = window.Read()
-    if button is 'Ok':
-        window.Close()
-    if button is None:
-        window.Close()
+        button, values = window.Read()
+        if button is 'Ok':
+            window.Close()
+        if button is None:
+            window.Close()
+    except FileNotFoundError:
+        sg.Popup('No hay informe de errores para mostrar')
 
 
 def config():
@@ -103,8 +105,9 @@ def config():
                 cantV = int(values['X1'])  # SON LOS VALORES DE LOS SLIDER QUE REFERENCIAN A LAS CANTIDADES
                 cantS = int(values['X2'])  # X DE CADA TIPO DE PALABRA QUE EL DOCENTE QUIERE MOSTRAR
                 cantA = int(values['X3'])
-                dic = getListaResultante(cantV, cantA, cantS, values['roVe'], values['veVe'], values['amVe'], values['roSu'], values['veSu'], values['amSu'], values['roAd'], values['veAd'], values['amAd'])
+                dic, lisR = getListaResultante(cantV, cantA, cantS, values['roVe'], values['veVe'], values['amVe'], values['roSu'], values['veSu'], values['amSu'], values['roAd'], values['veAd'], values['amAd'])
                 TipoAyudas = (values['ayuda'], values['def'])
+                diccionario['listaPal'] = lisR
                 diccionario['tam'] = dic['maxPal']
                 diccionario['palabras'] = dic
                 diccionario['ayudas'] = TipoAyudas
@@ -135,7 +138,7 @@ def main():
         if info['fin'] == 0:
             sys.exit()
         else:
-            opcion = tablero(info['tam'], info['palabras'], info['Mayusculas'], info['sentidos'], info['ayudas'])
+            opcion = tablero(info['listaPal'],info['tam'], info['palabras'], info['Mayusculas'], info['sentidos'], info['ayudas'])
             if opcion is 'jugar':
                 info['palabras']['palVer'].clear()
                 info['palabras']['palSus'].clear()

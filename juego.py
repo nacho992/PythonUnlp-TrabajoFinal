@@ -116,25 +116,52 @@ def procesar_palabras(matriz, nxn, palabras, esfila):
                     posicion = 0
     return matriz
 
+def ordenacion_horizontal(tupla):
+  '''
+  ordena segundo elemento de la tupla de mayor a menor
+  '''
+  return (tupla[1], -tupla[0])
 
 
 
-def definir_color(un_string, dic):
+def ordenacion_vertical(tupla):
+  '''
+  ordena primer elemento de la tupla de mayor a menor
+  '''
+  return (tupla[0], -tupla[1])
+
+
+def armo_palabra(dic,todos_los_clik,sentido):
+    '''
+    deveulve una palabra segun las letras que haya en las coordenadas recibidas como parametro (todos_los_clik).
+    '''
+    un_string = ''
+    if sentido:
+        datos = sorted(todos_los_clik, key=ordenacion_horizontal)
+    else:
+        datos = sorted(todos_los_clik, key=ordenacion_vertical)
+    for i in datos:
+        un_string = un_string + dic[i]
+    return un_string.lower()
+
+
+def definir_color(un_string, dic, lnue):
     """ recibe una palabra a buscar en el diccionario, la busca y nos retorno un valor(color) del diccionaro """
     color = 'red'
     encontre = False
     try:
-        if un_string in dic['palVer'][0]:
-            color = dic['verbo']
-            encontre = True
-        elif un_string in dic['palAd'][0]:
-            color = dic['adjetivo']
-            encontre = True
-        elif un_string in dic['palSus'][0]:
-            color = dic['sustantivo']
-            encontre = True
-        else:
-          sg.Popup('La palabra no existe')
+        if un_string in lnue:
+            if un_string in dic['palVer'][0]:
+                color = dic['verbo']
+                encontre = True
+            elif un_string in dic['palAd'][0]:
+                color = dic['adjetivo']
+                encontre = True
+            elif un_string in dic['palSus'][0]:
+                color = dic['sustantivo']
+                encontre = True
+            else:
+                sg.Popup('La palabra no existe')
     except IndexError:
         color = 'dimgrey'
     return encontre, color
@@ -191,7 +218,7 @@ def tablero(lnue,long_maxPal, dic_palabras, M, ok, TipoAyuda):
     """
        en esta funcion se encarga de armar la interface del tablero, e interactuar con todos lo modulos
        iniciando con la creacion de nuestra matriz, para esto se toma la longitud de la palabra mas grande + 3
-       para darle mas espacion y mejor distribucion a las palabras(param dic_palabras), siguiendo con el procesamiento de estas misma,
+       para darle mas espacion y mejor distribucion a las palabras(param lnue), siguiendo con el procesamiento de estas misma,
        depues completando la matriz con letras random, y finalmente graficandola, depues de eso, en esta funcion,
        tambien maneja toda la interaccion del jugador con el tablero mapiando los click e evaluando la palabras,
        el tipo de ayuda que este recibe(param tipoAyuda), el sentido en el que se le van a mostrar la palabras(param ok)
@@ -221,7 +248,7 @@ def tablero(lnue,long_maxPal, dic_palabras, M, ok, TipoAyuda):
     matriz = procesar_palabras(matriz, nxn, lnue, ok)
     dato = completarMatriz(matriz, nxn)
     graficar_matrix(dato, nxn, g, M)
-    palC = ''  # esta lista contendra las letras que seran evaluadas con las palabras de la lista(lnue)
+    #palC = ''  # esta lista contendra las letras que seran evaluadas con las palabras de la lista(lnue)
     cantidad_pal = len(lnue)
     palabrasBuscadas = '\n'.join(['{}'.format(p) for p in lnue])
     window.FindElement('cantPal').Update(cantidad_pal)
@@ -274,15 +301,15 @@ def tablero(lnue,long_maxPal, dic_palabras, M, ok, TipoAyuda):
                     print()
                 elif click not in todos_los_clik:
                     g.TKCanvas.itemconfig(dicColor[click], fill="blue")
-                    todos_los_clik.append(click)  # coordenadas
-                    palC = palC + dic[click]  # letras
+                    todos_los_clik.append(click)  # coordenadas seleccionadas
+                    #palC = palC + dic[click]  # letras
                 else:
                     g.TKCanvas.itemconfig(dicColor[click], fill=colorTablero)
                     todos_los_clik.remove(click)
-                    palC = palC[:-1]
+                    #palC = palC[:-1]
         if button is 'Verificar Palabra / Limpiar selección':
-
-            encontre, color = definir_color(palC, dic_palabras)
+            palC = armo_palabra(dic,todos_los_clik,ok) # se arma la palabra segun las letras que haya en las coordenadas
+            encontre, color = definir_color(palC,dic_palabras,lnue)
             #-------si la seleccion coincide con alguna palabra--------#
             if encontre:
                 cantidad_pal -= 1

@@ -66,12 +66,27 @@ def getListaResultante(lv, la, ls, rV, vV, aV, rSus, vSus, aSus, rAd, vAd, aAd):
         retorna la lista resultante con las palabras
         segun la cantidad a la que el docente lo haya limitado
         es decir ej:
-        si selecciona 3 verbos, 2 sustantivos, 1 adjetivo
+        si selecciona 3 verbos, 2 sustantivos, 1 adjetivo, y un diccionario con todas las palabras a buscar
 
     """
-    l_palAbuscar_verbo.append(lista_verbos[: lv])
-    l_palAbuscar_ad.append(lista_adjetivos[: la])
-    l_palAbuscar_sus.append(lista_sustantivos[: ls])
+    if lv <= len(lista_verbos):
+        l_palAbuscar_verbo.append(lista_verbos[: lv])
+    else:
+        lv = len(lista_verbos)
+        l_palAbuscar_verbo.append(lista_verbos[: lv])
+
+    if la <= len(lista_adjetivos):
+        l_palAbuscar_ad.append(lista_adjetivos[: la])
+    else:
+        la = len(lista_adjetivos)
+        l_palAbuscar_ad.append(lista_adjetivos[: la])
+
+    if ls <= len(lista_sustantivos):
+        l_palAbuscar_sus.append(lista_sustantivos[: ls])
+    else:
+        ls = len(lista_sustantivos)
+        l_palAbuscar_sus.append(lista_sustantivos[: ls])
+
     lisR = lista_verbos[: lv] + lista_adjetivos[: la] + lista_sustantivos[: ls]
     maxPal = max(lisR, key=len)
     dic = {}
@@ -201,7 +216,7 @@ def clasificar_pal(Un_string):
                 lista_verbos.append(Un_string)
                 definicion = devuelve_definicion(Un_string,'verbo')
                 reporte(definicion,'ArchivoLocal')
-                # ok = True
+            
         elif (buscar_pattern(Un_string) != 'VB') and ('ES:Verbos' in secciones):   #si no coincide con pattern
             if Un_string not in lista_verbos:
                 lista_verbos.append(Un_string)
@@ -209,20 +224,20 @@ def clasificar_pal(Un_string):
                 reporte(msj,'reporte')
                 definicion = devuelve_definicion(Un_string,'verbo')
                 reporte(definicion,'ArchivoLocal')
-                # ok = True
+               
         elif 'ES:Verbos' not in secciones and buscar_pattern(Un_string) == 'VB':   #si coincide con wiktionary
             if Un_string not in lista_verbos:
                 lista_verbos.append(Un_string)
                 msj = ingresar_definicion()
                 reporte(msj,'ArchivoLocal')
-                # ok = True
+            
 
         elif 'ES:Adjetivos' in secciones and buscar_pattern(Un_string) == 'JJ':
             if Un_string not in lista_adjetivos:
                 lista_adjetivos.append(Un_string)
                 definicion = devuelve_definicion(Un_string,'adjetivo')
                 reporte(definicion,'ArchivoLocal')
-                # ok = True
+           
         elif buscar_pattern(Un_string) != 'JJ' and 'ES:Adjetivos' in secciones:
             if Un_string not in lista_adjetivos:
                 lista_adjetivos.append(Un_string)
@@ -230,20 +245,20 @@ def clasificar_pal(Un_string):
                 reporte(msj,'reporte')
                 definicion = devuelve_definicion(Un_string,'adjetivo')
                 reporte(definicion,'ArchivoLocal')
-                # ok = True
+        
         elif 'ES:Adjetivos' not in secciones and buscar_pattern(Un_string) == 'JJ':
             if Un_string not in lista_adjetivos:
                 lista_adjetivos.append(Un_string)
                 msj = ingresar_definicion()
                 reporte(msj,'ArchivoLocal')
-                # ok = True
+
 
         elif 'ES:Sustantivos' in secciones and buscar_pattern(Un_string) == 'NN':
             if Un_string not in lista_sustantivos:
                 lista_sustantivos.append(Un_string)
                 definicion = devuelve_definicion(Un_string,'sustantivo')
                 reporte(definicion,'ArchivoLocal')
-                # ok = True
+          
         elif buscar_pattern(Un_string) != 'NN' and 'ES:Sustantivos' in secciones:
             if Un_string not in lista_sustantivos:
                 lista_sustantivos.append(Un_string)
@@ -251,13 +266,13 @@ def clasificar_pal(Un_string):
                 reporte(msj, 'reporte')
                 definicion = devuelve_definicion(Un_string,'sustantivo')
                 reporte(definicion,'ArchivoLocal')
-                # ok = True
+    
         elif 'ES:Sustantivos' not in secciones and buscar_pattern(Un_string) == 'NN':
             if Un_string not in lista_sustantivos:
                 lista_sustantivos.append(Un_string)
                 msj = ingresar_definicion()
                 reporte(msj, 'ArchivoLocal')
-                # ok = True
+
 
         else:
             msj = f'la palabra {Un_string} no se encuentra en pattern y tampoco en Wiktionary.\n'

@@ -2,22 +2,19 @@ import PySimpleGUI as sg
 import random
 import string
 
-
+dic_palabra_coordenada = {}  # clave sera una palabra, como valor tiene una lista de coordenadas donde fue ubicada
 caja = 15
 dic = {}   # letra en la coordenada
-dicColor = {}  # coordenada
+dicColor = {}  
 colorTablero = 'dimgrey'
 
 
 def obtener_datosArch(arch):
 
-    a = open(arch,'r')
+    a = open(arch, 'r')
     datos = a.read()
     a.close()
     return datos
-
-
-
 
 
 def crearMatriz(nxn):
@@ -49,11 +46,11 @@ def completarMatriz(matriz, nxn):
 
 
 def valores_posicion(matriz, nxn, esfila, pos):
-    '''
+    """
         retorna un lista con informacion de una fila/columna especifica de la matriz
         esfila --> indica si es columna o fila
         pos --> indica que fila/columna
-    '''
+    """
     valores = []
     espacios = 0
 
@@ -81,10 +78,13 @@ def colocar_palabra(matriz, palabra, esfila, pos, inicio):
     """
         coloca la palabra dentro de la matriz, en una coordenada especificada
     """
+    dic_palabra_coordenada[palabra] = []
     for x in range(inicio, inicio + len(palabra)):
         if esfila:
+            dic_palabra_coordenada[palabra].append((pos,x))  #clave sera una palabra, como valor tiene una lista de coordenadas donde fue ubicada
             matriz[pos][x] = palabra[x - inicio]
         else:
+            dic_palabra_coordenada[palabra].append((x,pos))
             matriz[x][pos] = palabra[x - inicio]
     return matriz
 
@@ -116,33 +116,39 @@ def procesar_palabras(matriz, nxn, palabras, esfila):
                     posicion = 0
     return matriz
 
-def ordenacion_horizontal(tupla):
-  '''
-  ordena segundo elemento de la tupla de mayor a menor
-  '''
-  return (tupla[1], -tupla[0])
 
+def ordenacion_horizontal(tupla):
+    """
+        ordena segundo elemento de la tupla de mayor a menor
+    """
+    return tupla[1], -tupla[0]
 
 
 def ordenacion_vertical(tupla):
-  '''
-  ordena primer elemento de la tupla de mayor a menor
-  '''
-  return (tupla[0], -tupla[1])
+    """
+        ordena primer elemento de la tupla de mayor a menor
+    """
+    return tupla[0], - tupla[1]
 
 
-def armo_palabra(dic,todos_los_clik,sentido):
-    '''
-    deveulve una palabra segun las letras que haya en las coordenadas recibidas como parametro (todos_los_clik).
-    '''
+def armo_palabra(dic, todos_los_clik, sentido):
+    """
+        deveulve una palabra segun las letras que haya en las coordenadas recibidas como parametro (todos_los_clik).
+    """
     un_string = ''
+    todos_los_clik.sort() #  se ordena para luego poder comparar si son iguales
     if sentido:
         datos = sorted(todos_los_clik, key=ordenacion_horizontal)
     else:
         datos = sorted(todos_los_clik, key=ordenacion_vertical)
     for i in datos:
         un_string = un_string + dic[i]
-    return un_string.lower()
+    if un_string.lower() in dic_palabra_coordenada.keys():
+        if dic_palabra_coordenada[un_string.lower()] == todos_los_clik: #  si la palabra se encuentra en sus coordenadas correspondientes
+            return un_string.lower()
+    else:
+        un_string = ''
+        return un_string.lower()
 
 
 def definir_color(un_string, dic, lnue):
@@ -154,12 +160,15 @@ def definir_color(un_string, dic, lnue):
             if un_string in dic['palVer'][0]:
                 color = dic['verbo']
                 encontre = True
+                dic['palVer'][0].remove(un_string)
             elif un_string in dic['palAd'][0]:
                 color = dic['adjetivo']
                 encontre = True
+                dic['palAd'][0].remove(un_string)
             elif un_string in dic['palSus'][0]:
                 color = dic['sustantivo']
                 encontre = True
+                dic['palSus'][0].remove(un_string)
             else:
                 sg.Popup('La palabra no existe')
     except IndexError:
@@ -193,14 +202,18 @@ def ventana_terminar(cantidad_pal, lnue):
          retornado la opcion de volver al menu o finalizar
     """
     ventana = [
-        [sg.Text(f'Cantidad por encontrar :{cantidad_pal}, palabras :{lnue}')],
+        [sg.Text('FIN DEL JUEGO', size=(30, 1), justification='center', font=('Helvetica', 25), text_color='lightgreen')],
+        [sg.Text(f'Cantidad de palabras por encontrar : {cantidad_pal}', size=(30, 1), justification='center', font=('Helvetica', 25), text_color='red')],
+        [sg.Text(f"Verbos: {lnue['palVer']}", size=(30, 1), text_color='orange', font=('Helvetica', 15))],
+        [sg.Text(f"Sustantivos: {lnue['palSus']}", size=(30, 1), text_color='orange', font=('Helvetica', 15))],
+        [sg.Text(f"adjetivos: {lnue['palAd']}", size=(30, 1), text_color='orange', font=('Helvetica', 15))],
         [sg.Radio('Volver al menu', "R", key='v'), sg.Radio('Salir del juego', "R", key='S'), sg.Button('OK')]
 
     ]
     window = sg.Window('Continuar?').Layout(ventana)
     c = 'no'
     while True:
-        button,values = window.Read()
+        button, values = window.Read()
         if button is None:
             break
         if button is 'OK':
@@ -214,10 +227,10 @@ def ventana_terminar(cantidad_pal, lnue):
     return c
 
 
-def tablero(lnue,long_maxPal, dic_palabras, M, ok, TipoAyuda):
+def tablero(lnue, long_maxPal, dic_palabras, M, ok, TipoAyuda):
     """
        en esta funcion se encarga de armar la interface del tablero, e interactuar con todos lo modulos
-       iniciando con la creacion de nuestra matriz, para esto se toma la longitud de la palabra mas grande + 3
+       iniciando con la creacion de nuestra matriz, para esto se toma la longitud de la palabra mas grande + 4
        para darle mas espacion y mejor distribucion a las palabras(param lnue), siguiendo con el procesamiento de estas misma,
        depues completando la matriz con letras random, y finalmente graficandola, depues de eso, en esta funcion,
        tambien maneja toda la interaccion del jugador con el tablero mapiando los click e evaluando la palabras,
@@ -225,30 +238,31 @@ def tablero(lnue,long_maxPal, dic_palabras, M, ok, TipoAyuda):
     """
     sg.ChangeLookAndFeel('Dark')
     layout = [
-            [sg.Text('sopa de letras', text_color='red', size=(10, 5))],
-            [sg.Graph((400, 400), (0, 150), (150, 0), key='_dibujar_', change_submits=True, drag_submits=False)],
+            [sg.Text('sopa de letras', text_color='red')],
+            [sg.Graph((430, 430), (0, 180), (180, 0), key='_dibujar_', change_submits=True, drag_submits=False)],
             [sg.Frame(
                             layout=[
                                         [sg.Text('Cantidad de palabras restantes :'), sg.Text('', key='cantPal')],
-                                        [sg.Text('Sustantivos :') ,sg.Text('', key='cantS'),
+                                        [sg.Text('Sustantivos :'), sg.Text('', key='cantS'),
                                         sg.Text('Adjetivos :'),sg.Text('', key='cantA'),
                                         sg.Text('Verbos :'),sg.Text('', key='cantV')],
                                         [sg.Multiline('', key='ayuda'), sg.Multiline('', key='def')],
                                      ], title='Cantidad de palabras y/o Definiciones y palabras', title_color='lightgreen'
                         )],
-            [sg.ReadButton('Volver al menu', key='Volver al menu'), sg.Button('cancelar'), sg.Button('Verificar Palabra / Limpiar selección'), sg.Button('terminar')],
+            [sg.ReadButton('Volver al menu', button_color=('white', 'orange'), key='Volver al menu'), sg.Button('salir', button_color=('white', 'red')), sg.Button('Verificar Palabra / Limpiar selección'), sg.Button('terminar', button_color=('white', 'red'))],
          ]
 
-    window =sg.Window('panel').Layout(layout).Finalize()
+    window = sg.Window('panel').Layout(layout).Finalize()
     g = window.FindElement('_dibujar_')
     window.FindElement('Volver al menu').Update(disabled=True)
+    window.FindElement('salir').Update(disabled=True)
 
-    nxn = long_maxPal + 3               # longuitud de la palabra mas larga
+    nxn = long_maxPal + 4  # longuitud de la palabra mas larga
     matriz = crearMatriz(nxn)
     matriz = procesar_palabras(matriz, nxn, lnue, ok)
     dato = completarMatriz(matriz, nxn)
     graficar_matrix(dato, nxn, g, M)
-    #palC = ''  # esta lista contendra las letras que seran evaluadas con las palabras de la lista(lnue)
+    # palC = ''  # esta lista contendra las letras que seran evaluadas con las palabras de la lista(lnue)
     cantidad_pal = len(lnue)
     palabrasBuscadas = '\n'.join(['{}'.format(p) for p in lnue])
     window.FindElement('cantPal').Update(cantidad_pal)
@@ -256,11 +270,7 @@ def tablero(lnue,long_maxPal, dic_palabras, M, ok, TipoAyuda):
     todos_los_clik = []  # todas las cooredenadas donde se hizo click en el tablero
     coordenadas_encontradas = []
 
-
-
-
-
-    #--------SE EVALUAN LAS CONDICIONES DE AYUDA-------#
+    # --------SE EVALUAN LAS CONDICIONES DE AYUDA------- #
     if TipoAyuda[0] and TipoAyuda[1]:
         window.FindElement('def').Update(defPal)
         window.FindElement('ayuda').Update(palabrasBuscadas)
@@ -282,7 +292,7 @@ def tablero(lnue,long_maxPal, dic_palabras, M, ok, TipoAyuda):
         window.FindElement('cantS').Update(str(len(dic_palabras['palSus'][0])))
         window.FindElement('cantV').Update(len(dic_palabras['palVer'][0]))
         window.FindElement('cantA').Update(str(len(dic_palabras['palAd'][0])))
-    ##-----------------FIN EVALUACION------------------
+    # -----------------FIN EVALUACION------------------#
 
     while True:
         button, values = window.Read()
@@ -302,43 +312,45 @@ def tablero(lnue,long_maxPal, dic_palabras, M, ok, TipoAyuda):
                 elif click not in todos_los_clik:
                     g.TKCanvas.itemconfig(dicColor[click], fill="blue")
                     todos_los_clik.append(click)  # coordenadas seleccionadas
-                    #palC = palC + dic[click]  # letras
                 else:
                     g.TKCanvas.itemconfig(dicColor[click], fill=colorTablero)
                     todos_los_clik.remove(click)
-                    #palC = palC[:-1]
         if button is 'Verificar Palabra / Limpiar selección':
-            palC = armo_palabra(dic,todos_los_clik,ok) # se arma la palabra segun las letras que haya en las coordenadas
-            encontre, color = definir_color(palC,dic_palabras,lnue)
-            #-------si la seleccion coincide con alguna palabra--------#
+            # se arma la palabra segun las letras que haya en las coordenadas
+            palC = armo_palabra(dic, todos_los_clik, ok)
+            encontre, color = definir_color(palC, dic_palabras, lnue)
+            #  -------si la seleccion coincide con alguna palabra--------#
             if encontre:
                 cantidad_pal -= 1
                 window.FindElement('cantPal').Update(cantidad_pal)
-                sg.Popup(f'Has Encontrado la palabra {palC}')
+                sg.Popup(f'Has Encontrado la palabra {palC}', text_color='orange', title='BIEN')
                 for i in todos_los_clik:
-                    g.Update(g.TKCanvas.itemconfig(dicColor[i], fill= color)) #concatenar + 1 a dicolor para pintar solo letra
+                    g.Update(g.TKCanvas.itemconfig(dicColor[i], fill=color))  # concatenar + 1 a dicolor para pintar solo letra
                     coordenadas_encontradas.append(i)
                 lnue.remove(palC)  # se van eliminando las palabras encontradas
                 window.FindElement('ayuda').Update(lnue)
                 todos_los_clik.clear()
                 palC = ''
             else:
-                #-------Se limpia_todo lo que haya sido seleccionado--------#
+                # -------Se limpia_todo lo que haya sido seleccionado--------#
+                sg.Popup(f'la palabra {palC} no existe', text_color='lightgreen', title='ERROR', font='Curier')
                 for i in todos_los_clik:
                     g.Update(g.TKCanvas.itemconfig(dicColor[i], fill=colorTablero))
                 todos_los_clik.clear()
                 palC = ''
-            #-----------------------------------------------------------#
+            # -----------------------------------------------------------#
             if cantidad_pal == 0:
                 window.FindElement('Volver al menu').Update(disabled=False)
-                sg.Popup('¡¡Has encontrado todas las palabras!!')
-                #------se limpian las listas---------#
+                window.FindElement('salir').Update(disabled=False)
+                window.FindElement('terminar').Update(disabled=False)
+                sg.Popup('¡¡Has encontrado todas las palabras!!', title='Crack!')
+                # ------se limpian las listas---------#
                 dic_palabras['palVer'].clear()
                 dic_palabras['palSus'].clear()
                 dic_palabras['palAd'].clear()
         c = ''
         if button is 'terminar':
-            var = ventana_terminar(cantidad_pal, lnue)
+            var = ventana_terminar(cantidad_pal, dic_palabras)
             if var is 'jugar':
                 window.Close()
                 return var
@@ -348,6 +360,4 @@ def tablero(lnue,long_maxPal, dic_palabras, M, ok, TipoAyuda):
         if button is 'Volver al menu':
             c = 'jugar'
             window.Close()
-            return c
-        if button is 'Cancelar':
             return c

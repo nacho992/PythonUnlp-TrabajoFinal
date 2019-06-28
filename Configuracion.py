@@ -105,18 +105,21 @@ def config():
                 cantV = int(values['X1'])  # SON LOS VALORES DE LOS SLIDER QUE REFERENCIAN A LAS CANTIDADES
                 cantS = int(values['X2'])  # X DE CADA TIPO DE PALABRA QUE EL DOCENTE QUIERE MOSTRAR
                 cantA = int(values['X3'])
-                dic, lisR = getListaResultante(cantV, cantA, cantS, values['roVe'], values['veVe'], values['amVe'], values['roSu'], values['veSu'], values['amSu'], values['roAd'], values['veAd'], values['amAd'])
-                TipoAyudas = (values['ayuda'], values['def'])
-                diccionario['listaPal'] = lisR
-                diccionario['tam'] = dic['maxPal']
-                diccionario['palabras'] = dic
-                diccionario['ayudas'] = TipoAyudas
-                diccionario['sentidos'] = values['h']
-                diccionario['Mayusculas'] = values['M']
-                diccionario['fin'] = 1
-                limpiarL()
-                window.Close()
-                break
+                if cantA != 0 or cantS != 0 or cantV != 0:
+                    dic, lisR = getListaResultante(cantV, cantA, cantS, values['roVe'], values['veVe'], values['amVe'], values['roSu'], values['veSu'], values['amSu'], values['roAd'], values['veAd'], values['amAd'])
+                    TipoAyudas = (values['ayuda'], values['def'])
+                    diccionario['listaPal'] = lisR
+                    diccionario['tam'] = dic['maxPal']
+                    diccionario['palabras'] = dic
+                    diccionario['ayudas'] = TipoAyudas
+                    diccionario['sentidos'] = values['h']
+                    diccionario['Mayusculas'] = values['M']
+                    diccionario['fin'] = 1
+                    limpiarL()
+                    window.Close()
+                    break
+                else:
+                    sg.Popup('Como minimo debe ingresar una palabra')
             if button is 'Cancelar':
                 window.Close()
                 break

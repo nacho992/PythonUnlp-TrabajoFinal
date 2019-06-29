@@ -9,6 +9,20 @@ dicColor = {}
 colorTablero = 'dimgrey'
 
 
+def limpiar_vacias(dic_palabras):
+    '''
+    esta funcion evita que se agregen listas vacias al diccionario en caso de leventar un slider contador sin palabras ingreseadas 
+    '''
+
+    if len(dic_palabras['palVer']) > 1 and len(dic_palabras['palAd']) > 1 and len(dic_palabras['palSus']) > 1:
+        for i in range(len(dic_palabras['palVer']) - 1):
+            dic_palabras['palVer'].remove([])
+            dic_palabras['palAd'].remove([])
+            dic_palabras['palSus'].remove([])
+    
+
+
+
 def obtener_datosArch(arch):
 
     a = open(arch, 'r')
@@ -204,9 +218,9 @@ def ventana_terminar(cantidad_pal, lnue):
     ventana = [
         [sg.Text('FIN DEL JUEGO', size=(30, 1), justification='center', font=('Helvetica', 25), text_color='lightgreen')],
         [sg.Text(f'Cantidad de palabras por encontrar : {cantidad_pal}', size=(30, 1), justification='center', font=('Helvetica', 25), text_color='red')],
-        [sg.Text(f"Verbos: {lnue['palVer']}", size=(30, 1), text_color='orange', font=('Helvetica', 15))],
-        [sg.Text(f"Sustantivos: {lnue['palSus']}", size=(30, 1), text_color='orange', font=('Helvetica', 15))],
-        [sg.Text(f"adjetivos: {lnue['palAd']}", size=(30, 1), text_color='orange', font=('Helvetica', 15))],
+        [sg.Text(f"Verbos: {lnue['palVer'][0]}", size=(30, 1), text_color='orange', font=('Helvetica', 15))],
+        [sg.Text(f"Sustantivos: {lnue['palSus'][0]}", size=(30, 1), text_color='orange', font=('Helvetica', 15))],
+        [sg.Text(f"adjetivos: {lnue['palAd'][0]}", size=(30, 1), text_color='orange', font=('Helvetica', 15))],
         [sg.Radio('Volver al menu', "R", key='v'), sg.Radio('Salir del juego', "R", key='S'), sg.Button('OK')]
 
     ]
@@ -257,12 +271,15 @@ def tablero(lnue, long_maxPal, dic_palabras, M, ok, TipoAyuda):
     window.FindElement('Volver al menu').Update(disabled=True)
     window.FindElement('salir').Update(disabled=True)
 
+    limpiar_vacias(dic_palabras) #  en caso de que se ingrese una lista vacia al diccionario
+
+    #-----------------------------------------------------------------------------------#
+
     nxn = long_maxPal + 4  # longuitud de la palabra mas larga
     matriz = crearMatriz(nxn)
     matriz = procesar_palabras(matriz, nxn, lnue, ok)
     dato = completarMatriz(matriz, nxn)
     graficar_matrix(dato, nxn, g, M)
-    # palC = ''  # esta lista contendra las letras que seran evaluadas con las palabras de la lista(lnue)
     cantidad_pal = len(lnue)
     palabrasBuscadas = '\n'.join(['{}'.format(p) for p in lnue])
     window.FindElement('cantPal').Update(cantidad_pal)
@@ -361,3 +378,5 @@ def tablero(lnue, long_maxPal, dic_palabras, M, ok, TipoAyuda):
             c = 'jugar'
             window.Close()
             return c
+        if button is 'salir':
+            break

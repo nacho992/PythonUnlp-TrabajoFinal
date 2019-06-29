@@ -207,7 +207,6 @@ def clasificar_pal(Un_string):
 
     pal = Wiktionary(license=None, throttle=5.0, language='ES').search(Un_string)
     try:
-        # ok = False
         secciones = []
         for section in pal.categories:
             secciones.append(section)

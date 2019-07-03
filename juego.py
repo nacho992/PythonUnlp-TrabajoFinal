@@ -9,6 +9,10 @@ dicColor = {}
 colorTablero = 'dimgrey'
 
 
+
+
+
+
 def limpiar_vacias(dic_palabras):
     '''
     esta funcion evita que se agregen listas vacias al diccionario en caso de leventar un slider contador sin palabras ingreseadas 
@@ -20,16 +24,6 @@ def limpiar_vacias(dic_palabras):
             dic_palabras['palAd'].remove([])
             dic_palabras['palSus'].remove([])
     
-
-
-
-def obtener_datosArch(arch):
-
-    a = open(arch, 'r')
-    datos = a.read()
-    a.close()
-    return datos
-
 
 def crearMatriz(nxn):
     matriz = []
@@ -203,10 +197,10 @@ def graficar_matrix(mt, nxn, d, M):
             dicColor[(fila, columna)] = dato
             if M:
                 dic[(fila, columna)] = mt[fila][columna].upper()
-                d.DrawText(mt[fila][columna].upper(), localizacion , font='Courier 22', color='white')
+                d.DrawText(mt[fila][columna].upper(), localizacion , font='Courier 20', color='white')
             else:
                 dic[(fila, columna)] = mt[fila][columna].lower()
-                d.DrawText(mt[fila][columna].lower(), localizacion , font='Courier 22', color='white')
+                d.DrawText(mt[fila][columna].lower(), localizacion , font='Courier 20', color='white')
 
 
 def ventana_terminar(cantidad_pal, lnue):
@@ -241,6 +235,33 @@ def ventana_terminar(cantidad_pal, lnue):
     return c
 
 
+def mostrar_definiciones(fuentesTitulo, fuenteTexto):
+    """
+        :param fuentesTitulo: sera la fuente para el titulo del reporte
+        :param fuenteTexto:  sera la fuente para contenido del reporte
+        :return: nada esta funcion solo se encarga de mostrarle al docente la informacion
+        de las palabras que no fueron admitidas por patterns/wiki, o wiki si, patterns no, o patterns si y wiki no
+    """
+    try:
+        a = open('ArchivoLocal.txt', 'r')
+        lista = a.readlines()
+        layout = [
+            [sg.Text('DEFINICIONES', size=(20, 1), font=fuentesTitulo)],
+            [sg.Listbox(values=lista[:], size=(70, 10), font=fuenteTexto)],
+            [sg.Text(''), sg.ReadButton('Ok')],
+
+        ]
+        window = sg.Window('panel').Layout(layout)
+
+        button = window.Read()
+        if button is 'Ok':
+            window.Close()
+        if button is None:
+            window.Close()
+    except FileNotFoundError:
+        sg.Popup('No hay informe de errores para mostrar')
+
+
 def tablero(lnue, long_maxPal, dic_palabras, M, ok, TipoAyuda):
     """
        en esta funcion se encarga de armar la interface del tablero, e interactuar con todos lo modulos
@@ -253,14 +274,14 @@ def tablero(lnue, long_maxPal, dic_palabras, M, ok, TipoAyuda):
     sg.ChangeLookAndFeel('Dark')
     layout = [
             [sg.Text('sopa de letras', text_color='red')],
-            [sg.Graph((430, 430), (0, 180), (180, 0), key='_dibujar_', change_submits=True, drag_submits=False)],
+            [sg.Graph((430, 430), (0, 220), (220, 0), key='_dibujar_', change_submits=True, drag_submits=False)],
             [sg.Frame(
                             layout=[
                                         [sg.Text('Cantidad de palabras restantes :'), sg.Text('', key='cantPal')],
                                         [sg.Text('Sustantivos :'), sg.Text('', key='cantS'),
                                         sg.Text('Adjetivos :'),sg.Text('', key='cantA'),
                                         sg.Text('Verbos :'),sg.Text('', key='cantV')],
-                                        [sg.Multiline('', key='ayuda'), sg.Multiline('', key='def')],
+                                        [sg.Multiline('', key='ayuda'), sg.InputCombo(values=('Arial', 'Comic', 'Curier'), key='titulo', size=(10, 1)), sg.InputCombo(values=('Helvetica, Verdana, Fixedsys'), size=(10, 1), key='texto'), sg.Button('Mostrar Definiciones')],
                                      ], title='Cantidad de palabras y/o Definiciones y palabras', title_color='lightgreen'
                         )],
             [sg.ReadButton('Volver al menu', button_color=('white', 'orange'), key='Volver al menu'), sg.Button('salir', button_color=('white', 'red')), sg.Button('Verificar Palabra / Limpiar selección'), sg.Button('terminar', button_color=('white', 'red'))],
@@ -275,7 +296,7 @@ def tablero(lnue, long_maxPal, dic_palabras, M, ok, TipoAyuda):
 
     #-----------------------------------------------------------------------------------#
 
-    nxn = long_maxPal + 4  # longuitud de la palabra mas larga
+    nxn = long_maxPal + 2  # longuitud de la palabra mas larga
     matriz = crearMatriz(nxn)
     matriz = procesar_palabras(matriz, nxn, lnue, ok)
     dato = completarMatriz(matriz, nxn)
@@ -283,28 +304,29 @@ def tablero(lnue, long_maxPal, dic_palabras, M, ok, TipoAyuda):
     cantidad_pal = len(lnue)
     palabrasBuscadas = '\n'.join(['{}'.format(p) for p in lnue])
     window.FindElement('cantPal').Update(cantidad_pal)
-    defPal = obtener_datosArch('ArchivoLocal.txt')  # SE OBTIENEN LAS DEFINICIONES GUARDADAS EN UN ARCHIVO LOCAL
     todos_los_clik = []  # todas las cooredenadas donde se hizo click en el tablero
     coordenadas_encontradas = []
 
     # --------SE EVALUAN LAS CONDICIONES DE AYUDA------- #
     if TipoAyuda[0] and TipoAyuda[1]:
-        window.FindElement('def').Update(defPal)
+        window.FindElement('Mostrar Definiciones').Update(disabled=False)
         window.FindElement('ayuda').Update(palabrasBuscadas)
         window.FindElement('cantS').Update(str(len(dic_palabras['palSus'][0])))
         window.FindElement('cantV').Update(len(dic_palabras['palVer'][0]))
         window.FindElement('cantA').Update(str(len(dic_palabras['palAd'][0])))
     elif TipoAyuda[0]:
+        window.FindElement('Mostrar Definiciones').Update(disabled=True)
         window.FindElement('ayuda').Update(palabrasBuscadas)
         window.FindElement('cantS').Update(str(len(dic_palabras['palSus'][0])))
         window.FindElement('cantV').Update(len(dic_palabras['palVer'][0]))
         window.FindElement('cantA').Update(str(len(dic_palabras['palAd'][0])))
     elif TipoAyuda[1]:
-        window.FindElement('ayuda').Update(defPal)
+        window.FindElement('Mostrar Definiciones').Update(disabled=False)
         window.FindElement('cantS').Update(str(len(dic_palabras['palSus'][0])))
         window.FindElement('cantV').Update(len(dic_palabras['palVer'][0]))
         window.FindElement('cantA').Update(str(len(dic_palabras['palAd'][0])))
     else:
+        window.FindElement('Mostrar Definiciones').Update(disabled=True)
         window.FindElement('cantPal').Update(str(len(lnue)))
         window.FindElement('cantS').Update(str(len(dic_palabras['palSus'][0])))
         window.FindElement('cantV').Update(len(dic_palabras['palVer'][0]))
@@ -366,6 +388,8 @@ def tablero(lnue, long_maxPal, dic_palabras, M, ok, TipoAyuda):
                 dic_palabras['palSus'].clear()
                 dic_palabras['palAd'].clear()
         c = ''
+        if button is 'Mostrar Definiciones':
+            mostrar_definiciones(values['titulo'],values['texto'])
         if button is 'terminar':
             var = ventana_terminar(cantidad_pal, dic_palabras)
             if var is 'jugar':

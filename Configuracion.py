@@ -36,6 +36,7 @@ def mostrar_reporte(fuentesTitulo, fuenteTexto):
 
 def config():
     """
+        Los colores configurados para el tipo de palabra podran ser diferentes o iguales.
         esta funcion provee todos los datos que se necesitan para la sopa de letras
         :returns un diccionario con toda la informacion listas de palabras, horientacion de las mismas,
         tamanio de la matriz, que este apartado tomamos como referencioa la longitud de la palabra mas grande,
@@ -149,6 +150,4 @@ def main():
                 ok = True
             else:
                 break
-
-
 main()

@@ -11,10 +11,10 @@ def registrar_temperatura():
 	info_temperatura = temperatura.datos_sensor()
 	info_temperatura['fecha'] = fechaActual()
 	try:
-        l = leer_json('dato-oficinas.json')
-        dicDatos = l
-    except FileNotFoundError:
-        continue
+		l = leer_json('dato-oficinas.json')
+		dicDatos = l
+	except FileNotFoundError:
+		continue
 	clave = 'oficina1'
 	if clave in dicDatos.keys():
 		while True:
@@ -31,7 +31,7 @@ def registrar_temperatura():
 				continue
 	else:
 		dicDatos['oficina1'] = info_temperatura
-		ar = escribir_archivo('dato-oficinas.json')
+		ar = establecer_archivo('dato-oficinas.json')
 		escribir_archivo(ar, dicDatos)
 		ar.close()
 		

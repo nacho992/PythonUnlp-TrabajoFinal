@@ -4,7 +4,26 @@ from modulos import getListaResultante
 from modulos import mostrar_palabra, limpiarL
 from modulos import eliminarPalabra
 from juego import tablero
+from sensores.manejo_de_archivo import leer_json
 import sys
+
+
+def cambiar_color(dic_json,clave):
+    """
+    devuelve un color segun la temperatura registrada
+    """
+    try :
+        color = 'Dark'
+        if dic_json[clave]["temperatura"] < 10:
+            color = 'BlueMono'
+        elif dic_json[clave]["temperatura"] in range(11,21):
+            color = 'GreenMono'
+        elif dic_json[clave]["temperatura"] in range(21,31):
+            color = 'Kayak'
+        return color
+    except FileNotFoundError:
+        sg.Popup('no se encuentra el archvio json')
+
 
 
 def mostrar_reporte(fuentesTitulo, fuenteTexto):
@@ -46,9 +65,12 @@ def config():
     """
     diccionario = {}
     diccionario['fin'] = 0
-    sg.ChangeLookAndFeel('Dark')
+    color_interfaz = 'Dark'
+    sg.ChangeLookAndFeel(color_interfaz)
     fuente = 'Helvetica'
-    layout = [[sg.InputCombo(values=('Arial', 'Comic', 'Curier'), key='titulo', size=(10, 1)), sg.InputCombo(values=('Helvetica, Verdana, Fixedsys'), size=(10, 1), key='texto'), sg.Button('Mostrar reporte')],
+    datos = leer_json('sensores\dato-oficinas.json')
+    claves = list(datos.keys())
+    layout = [[sg.InputCombo(values=('Arial', 'Comic', 'Curier'), key='titulo', size=(10, 1)), sg.InputCombo(values=('Helvetica, Verdana, Fixedsys'), size=(10, 1), key='texto'), sg.Button('Mostrar reporte'), sg.Button('Cambiar color para Tablero'),sg.Listbox(values=(claves),key='claves')],
               [sg.Text('Configuracion del juego', size=(30, 1), justification='center', font=(fuente, 25), text_color='lightgreen')],
               [sg.Frame(
                   layout=[
@@ -128,7 +150,10 @@ def config():
                 mostrar_reporte(values['titulo'], values['texto'])
         except ValueError:
             sg.Popup('Todos los campos son obligatorios.')
-    return diccionario
+        if button is 'Cambiar color para Tablero'and values['claves']:
+            color_interfaz = cambiar_color(datos,values['claves'][0])
+            sg.ChangeLookAndFeel(color_interfaz)
+    return diccionario, color_interfaz
 
 
 def main():
@@ -138,11 +163,11 @@ def main():
     """
     ok = True
     while ok:
-        info = config()
+        info,color_interfaz = config()
         if info['fin'] == 0:
             sys.exit()
         else:
-            opcion = tablero(info['listaPal'],info['tam'], info['palabras'], info['Mayusculas'], info['sentidos'], info['ayudas'])
+            opcion = tablero(color_interfaz,info['listaPal'],info['tam'], info['palabras'], info['Mayusculas'], info['sentidos'], info['ayudas'])
             if opcion is 'jugar':
                 info['palabras']['palVer'].clear()
                 info['palabras']['palSus'].clear()

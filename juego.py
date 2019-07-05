@@ -248,12 +248,12 @@ def mostrar_definiciones(fuentesTitulo, fuenteTexto):
         layout = [
             [sg.Text('DEFINICIONES', size=(20, 1), font=fuentesTitulo)],
             [sg.Listbox(values=lista[:], size=(70, 10), font=fuenteTexto)],
-            [sg.Text(''), sg.ReadButton('Ok')],
+            [sg.Button('Ok')],
 
         ]
         window = sg.Window('panel').Layout(layout)
 
-        button = window.Read()
+        button, values = window.Read()
         if button is 'Ok':
             window.Close()
         if button is None:
@@ -262,7 +262,7 @@ def mostrar_definiciones(fuentesTitulo, fuenteTexto):
         sg.Popup('No hay informe de errores para mostrar')
 
 
-def tablero(lnue, long_maxPal, dic_palabras, M, ok, TipoAyuda):
+def tablero(color_interfaz,lnue, long_maxPal, dic_palabras, M, ok, TipoAyuda):
     """
        en esta funcion se encarga de armar la interface del tablero, e interactuar con todos lo modulos
        iniciando con la creacion de nuestra matriz, para esto se toma la longitud de la palabra mas grande + 4
@@ -271,7 +271,7 @@ def tablero(lnue, long_maxPal, dic_palabras, M, ok, TipoAyuda):
        tambien maneja toda la interaccion del jugador con el tablero mapiando los click e evaluando la palabras,
        el tipo de ayuda que este recibe(param tipoAyuda), el sentido en el que se le van a mostrar la palabras(param ok)
     """
-    sg.ChangeLookAndFeel('Dark')
+    sg.ChangeLookAndFeel(color_interfaz)
     layout = [
             [sg.Text('sopa de letras', text_color='red')],
             [sg.Graph((430, 430), (0, 220), (220, 0), key='_dibujar_', change_submits=True, drag_submits=False)],

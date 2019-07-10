@@ -3,7 +3,7 @@ import random
 import string
 
 dic_palabra_coordenada = {}  # clave sera una palabra, como valor tiene una lista de coordenadas donde fue ubicada
-caja = 15
+caja = 32
 dic = {}   # letra en la coordenada
 dicColor = {}  
 colorTablero = 'dimgrey'
@@ -192,15 +192,15 @@ def graficar_matrix(mt, nxn, d, M):
     """
     for fila in range(nxn):
         for columna in range(nxn):
-            localizacion = (fila * caja + 11, columna * caja + 12)
+            localizacion = (fila * caja + 20, columna * caja + 19)
             dato = d.DrawRectangle((fila * caja + 5, columna * caja + 3), (fila * caja + caja + 5, columna * caja + caja + 3), line_color='white', fill_color=colorTablero)
             dicColor[(fila, columna)] = dato
             if M:
                 dic[(fila, columna)] = mt[fila][columna].upper()
-                d.DrawText(mt[fila][columna].upper(), localizacion , font='Courier 20', color='white')
+                d.DrawText(mt[fila][columna].upper(), localizacion , font='Courier 19', color='white')
             else:
                 dic[(fila, columna)] = mt[fila][columna].lower()
-                d.DrawText(mt[fila][columna].lower(), localizacion , font='Courier 20', color='white')
+                d.DrawText(mt[fila][columna].lower(), localizacion , font='Courier 19', color='white')
 
 
 def ventana_terminar(cantidad_pal, lnue):
@@ -274,7 +274,7 @@ def tablero(color_interfaz,lnue, long_maxPal, dic_palabras, M, ok, TipoAyuda):
     sg.ChangeLookAndFeel(color_interfaz)
     layout = [
             [sg.Text('sopa de letras', text_color='red')],
-            [sg.Graph((430, 430), (0, 220), (220, 0), key='_dibujar_', change_submits=True, drag_submits=False)],
+            [sg.Graph((430, 430), (0, 450), (450, 0), key='_dibujar_', change_submits=True, drag_submits=False)],
             [sg.Frame(
                             layout=[
                                         [sg.Text('Cantidad de palabras restantes :'), sg.Text('', key='cantPal')],
@@ -381,7 +381,7 @@ def tablero(color_interfaz,lnue, long_maxPal, dic_palabras, M, ok, TipoAyuda):
             if cantidad_pal == 0:
                 window.FindElement('Volver al menu').Update(disabled=False)
                 window.FindElement('salir').Update(disabled=False)
-                window.FindElement('terminar').Update(disabled=False)
+                window.FindElement('terminar').Update(disabled=True)
                 sg.Popup('¡¡Has encontrado todas las palabras!!', title='Crack!')
                 # ------se limpian las listas---------#
                 dic_palabras['palVer'].clear()

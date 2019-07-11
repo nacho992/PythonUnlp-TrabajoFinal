@@ -32,7 +32,7 @@ class Matriz:
         virtual = viewport(self.device, width=self.device.width, height=len(words) * 8)
         with canvas(virtual) as draw:
             for i, word in enumerate(words):
-                text(draw, (0, i * 8), word, fill="white", font=proportional(CP437_FONT))
+                text(draw, (0, i * 16), word, fill="white", font=proportional(CP437_FONT))
 
         for i in range(virtual.height - self.device.height):
             virtual.set_position((0, i))

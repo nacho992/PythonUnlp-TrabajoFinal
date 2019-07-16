@@ -6,6 +6,9 @@ caja = 32
 
 def asignar_datos(window, tipo_ayuda, lista_palabras, definiciones, tamanio_verbos, tamanio_adjetivos,
                   tamanio_sustantivos):
+    """
+    Segun el tipo de ayuda, seleccionada por el usuario se agregaran cantidades de palabras y/o definiciones de la palabras
+    """
     if tipo_ayuda[0] and tipo_ayuda[1]:
         window.FindElement('ayuda').Update(lista_palabras)
         window.FindElement('def').Update(definiciones)
@@ -23,12 +26,13 @@ def juego(color_interface, lista_palabras, longitud, mayusculas, sentido, tipo_a
           lista_sustantivos, color_verbo, color_adjetivo, color_sustantivo):
     """
        en esta funcion se encarga de armar la interface del tablero, e interactuar con todos lo modulos
-       iniciando con la creacion de nuestra matriz, para esto se toma la longitud de la palabra mas grande + 4
-       para darle mas espacion y mejor distribucion a las palabras(param lnue),
-        siguiendo con el procesamiento de estas misma,
-       depues completando la matriz con letras random, y finalmente graficandola, depues de eso, en esta funcion,
-       tambien maneja toda la interaccion del jugador con el tablero mapiando los click e evaluando la palabras,
-       el tipo de ayuda que este recibe(param tipoAyuda), el sentido en el que se le van a mostrar la palabras(param ok)
+       iniciando con la creacion de nuestra matriz, para esto se toma la longitud de la palabra mas grande
+       para darle mas espacion y mejor distribucion a las palabras,
+       siguiendo con el procesamiento de estas misma,
+       despues completando la matriz con letras random, y finalmente graficandola, despues de eso, en esta funcion,
+       tambien maneja toda la interaccion del jugador con el tablero mapiando los click y evaluando la palabras,
+       el tipo de ayuda que este recibe(param tipoAyuda), el sentido en el que se le van a mostrar la palabras(param sentido)
+       Retorna la opcion si el usuario quiere seguir jugando o no.
     """
     sg.SetOptions(background_color=color_interface)
     layout = [

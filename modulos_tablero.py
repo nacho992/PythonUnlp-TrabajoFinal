@@ -141,6 +141,9 @@ def graficar_matrix(color, mt, nxn, d, m):
 
 def determinar_ayuda(sg, layout, ayuda, color_interface):
 
+    """
+    se evaluan las opciones elejidas de ayuda y se crea la interfaz de ayuda
+    """
     if ayuda[0] and ayuda[1]:
         layout.append([sg.Frame(
             background_color=color_interface,

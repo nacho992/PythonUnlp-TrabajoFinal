@@ -1,0 +1,65 @@
+{
+  "oficina1": [
+    {
+      "temperatura": 10,
+      "humedad": 77,
+      "fecha": "12/05/2019"
+    },
+    {
+      "temperatura": 20,
+      "humedad": 45,
+      "fecha": "12/05/2019"
+    },{
+      "temperatura": 31,
+      "humedad": 59,
+      "fecha": "13/05/2019"
+    },
+    {
+      "temperatura": 21,
+      "humedad": 65,
+      "fecha": "12/02/2019"
+    }
+  ],
+  "oficina3": [
+    {
+      "temperatura": 23,
+      "humedad": 77,
+      "fecha": "12/06/2019"
+    },
+    {
+      "temperatura": 31,
+      "humedad": 80,
+      "fecha": "12/06/2019"
+    },{
+      "temperatura": 31,
+      "humedad": 21,
+      "fecha": "12/06/2019"
+    },
+    {
+      "temperatura": 34,
+      "humedad": 77,
+      "fecha": "12/06/2019"
+    }
+  ],
+  "oficina2": [
+    {
+      "temperatura": 10,
+      "humedad": 77,
+      "fecha": "12/08/2018"
+    },
+    {
+      "temperatura": 10,
+      "humedad": 77,
+      "fecha": "12/06/2019"
+    },{
+      "temperatura": 10,
+      "humedad": 77,
+      "fecha": "12/05/2019"
+    },
+    {
+      "temperatura": 10,
+      "humedad": 77,
+      "fecha": "12/04/2019"
+    }
+  ]
+}

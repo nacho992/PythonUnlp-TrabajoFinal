@@ -218,6 +218,10 @@ def agregar_palabra(un_string, opcion, fondo_interface):
 
 
 def limitaciones(cant, tipo):
+    """
+    recibe una cantidad y un tipo de palabra, se limitan las palabras segun la cantidad recibida como parametro. Retorna una lista por si
+    la cantidad que se elije, es incorrecta, es decir la lista correspondiente no tiene datos, entonces se salvan los datos. 
+    """
     lista = []
     while True:
         if cant < len(dicPalabras[tipo]) and cant != 0:
@@ -243,13 +247,12 @@ def get_lista_resultante(cant_v, cant_a, cant_s, rojo_v, verde_v, yellow_v,
                          rojo_s, verde_s, yellow_s, rojo_ad, verde_ad, yellow_ad,
                          color_interface, tipo_de_ayuda, sentido, mayuscula):
     """
-        lv --> LIMITE DE VERBOS
-        la --> LIMITE DE ADJETIVOS
-        ls --> LIMITE DE SUSTANTIVOS
-        retorna la lista resultante con las palabras
-        segun la cantidad a la que el docente lo haya limitado
-        es decir ej:
-        si selecciona 3 verbos, 2 sustantivos, 1 adjetivo, y un diccionario con todas las palabras a buscar
+        cant_v --> LIMITE DE VERBOS
+        cant_a --> LIMITE DE ADJETIVOS
+        cant_s --> LIMITE DE SUSTANTIVOS
+        esta funcion asigna los colores, tipo de ayuda, orientacion de las palabras, si es mayuscula o minuscula.
+        En caso de que el usuario no seleccione la informacion se asignarán valores por defecto, solo las cantidades son obligatorias
+        retorna un diccionario con toda la informacion
 
     """
     sin_marcar1 = True
